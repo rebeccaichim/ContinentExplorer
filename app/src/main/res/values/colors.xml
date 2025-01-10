@@ -2,4 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="text_shadow">#F1D626</color>
+    <color name="button_login">#E5E5E5</color>
+    <color name="colorPrimary">#F4BF6F</color>
+    <color name="colorSecondary">#F4BF6F</color>
+    <color name="colorAccent">#F4BF6F</color>
+    <color name="grey_text">#8B8B8C</color>
+    <color name="grey_text2">#7D7D7D</color>
+    <color name="grey_text3">#706F6F</color>
+    <color name="login_background">#E5E5E5</color>
 </resources>
