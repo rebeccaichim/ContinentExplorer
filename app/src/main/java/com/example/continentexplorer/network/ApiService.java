@@ -15,6 +15,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Body;
+import retrofit2.http.Path;
 
 
 public interface ApiService {
@@ -66,6 +67,10 @@ public interface ApiService {
     Call<Void> addVisitedCountry(@Body VisitedCountryRequest visitedCountryRequest);
 
 
-//    @POST("/api/users/profile")
-//    Call<User> getProfile(@Header("Authorization") String token);
+    @GET("visited-counties/{userId}")
+    Call<List<String>> getVisitedCounties(@Path("userId") long userId);
+
+    @GET("visited-countries/{userId}")
+    Call<List<String>> getVisitedCountries(@Path("userId") long userId);
+
 }

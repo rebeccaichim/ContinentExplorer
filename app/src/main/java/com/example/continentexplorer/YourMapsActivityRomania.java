@@ -3,6 +3,7 @@
     import android.annotation.SuppressLint;
     import android.app.DatePickerDialog;
     import android.content.Intent;
+    import android.content.SharedPreferences;
     import android.content.pm.PackageManager;
     import android.os.Bundle;
     import android.util.Log;
@@ -18,6 +19,8 @@
     import androidx.annotation.NonNull;
     import androidx.appcompat.app.AppCompatActivity;
     import androidx.core.app.ActivityCompat;
+    import androidx.recyclerview.widget.LinearLayoutManager;
+    import androidx.recyclerview.widget.RecyclerView;
 
     import com.example.continentexplorer.dto.Coordinates;
     import com.example.continentexplorer.dto.VisitedCountyRequest;
@@ -28,9 +31,12 @@
 
     import java.text.ParseException;
     import java.text.SimpleDateFormat;
+    import java.util.ArrayList;
     import java.util.Calendar;
+    import java.util.Collections;
     import java.util.Date;
     import java.util.HashMap;
+    import java.util.List;
     import java.util.Locale;
     import java.util.Map;
 
@@ -46,8 +52,58 @@
         private LinearLayout optionsLayout;
         private Button addOldCountyButton, addCurrentCountyButton;
         private Long userId; // Variabila pentru userId-ul utilizatorului conectat
+        private RecyclerView visitedCountiesRecyclerView;
+        private VisitedCountiesAdapter adapter;
+        private LinearLayout historyContainer;
 
         static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
+        private static final Map<String, String> countyFullNames = new HashMap<>();
+
+        static {
+            countyFullNames.put("RO-AB", "Alba");
+            countyFullNames.put("RO-AG", "Argeș");
+            countyFullNames.put("RO-AR", "Arad");
+            countyFullNames.put("RO-BC", "Bacău");
+            countyFullNames.put("RO-BH", "Bihor");
+            countyFullNames.put("RO-BN", "Bistrița-Năsăud");
+            countyFullNames.put("RO-BR", "Brăila");
+            countyFullNames.put("RO-BT", "Botoșani");
+            countyFullNames.put("RO-B", "București");
+            countyFullNames.put("RO-BV", "Brașov");
+            countyFullNames.put("RO-BZ", "Buzău");
+            countyFullNames.put("RO-CJ", "Cluj");
+            countyFullNames.put("RO-CL", "Călărași");
+            countyFullNames.put("RO-CS", "Caraș-Severin");
+            countyFullNames.put("RO-CT", "Constanța");
+            countyFullNames.put("RO-CV", "Covasna");
+            countyFullNames.put("RO-DB", "Dâmbovița");
+            countyFullNames.put("RO-DJ", "Dolj");
+            countyFullNames.put("RO-GJ", "Gorj");
+            countyFullNames.put("RO-GL", "Galați");
+            countyFullNames.put("RO-GR", "Giurgiu");
+            countyFullNames.put("RO-HD", "Hunedoara");
+            countyFullNames.put("RO-HR", "Harghita");
+            countyFullNames.put("RO-IF", "Ilfov");
+            countyFullNames.put("RO-IS", "Iasi");
+            countyFullNames.put("RO-IL", "Ialomita");
+            countyFullNames.put("RO-MS", "Mureș");
+            countyFullNames.put("RO-MH", "Mehedinti");
+            countyFullNames.put("RO-MM", "Maramures");
+            countyFullNames.put("RO-NT", "Neamț");
+            countyFullNames.put("RO-OT", "Olt");
+            countyFullNames.put("RO-PH", "Prahova");
+            countyFullNames.put("RO-SB", "Sibiu");
+            countyFullNames.put("RO-SJ", "Sălaj");
+            countyFullNames.put("RO-SM", "Satu Mare");
+            countyFullNames.put("RO-SV", "Suceava");
+            countyFullNames.put("RO-TL", "Tulcea");
+            countyFullNames.put("RO-TM", "Timiș");
+            countyFullNames.put("RO-TR", "Teleorman");
+            countyFullNames.put("RO-VL", "Vâlcea");
+            countyFullNames.put("RO-VN", "Vrancea");
+            countyFullNames.put("RO-VS", "Vaslui");
+        }
 
 
         // Adaugă aici map-ul pentru coordonatele județelor
@@ -104,19 +160,22 @@
         }
 
         @Override
-                    protected void onCreate(Bundle savedInstanceState) {
-                        super.onCreate(savedInstanceState);
-                        setContentView(R.layout.activity_your_maps_romania);
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_your_maps_romania);
 
-                        // Preia userId
-                        this.userId = getIntent().getLongExtra("userId", -1);
-                        if (userId == -1) {
-                            Log.e("YourMapsActivityRomania", "User ID not found. Redirecting to Login.");
-                            Intent intent = new     Intent(this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-                            return;
-                        }
+            // Preia userId
+            this.userId = getIntent().getLongExtra("userId", -1);
+            if (userId == -1) {
+                Log.e("YourMapsActivityRomania", "User ID not found. Redirecting to Login.");
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
+
+            // Inițializează ApiService
+            apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
 
             ImageView backArrow = findViewById(R.id.backButton);
             backArrow.setOnClickListener(view -> {
@@ -124,28 +183,140 @@
                 onBackPressed();
             });
 
+            // Preia istoricul
+            historyContainer = findViewById(R.id.historyContainer);
+            visitedCountiesRecyclerView = findViewById(R.id.visitedCountiesRecyclerView);
 
-                        Log.d("YourMapsActivityRomania", "User ID received: " + userId);
+            // Configurare RecyclerView
+            visitedCountiesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-                        webView = findViewById(R.id.romaniaMap);
-                        newPinButton = findViewById(R.id.newPinButton);
-                        optionsLayout = findViewById(R.id.optionsLayout);
-                        addOldCountyButton = findViewById(R.id.addOldCountyButton);
-                        addCurrentCountyButton = findViewById(R.id.addCurrentCountyButton);
+            loadVisitedCounties(Math.toIntExact(userId));
 
-                        setupMap();
+            // Încarcă județele vizitate din baza de date
+            loadVisitedCountiesDesc(Math.toIntExact(userId));
 
-                        newPinButton.setOnClickListener(v -> optionsLayout.setVisibility(View.VISIBLE));
+            Log.d("YourMapsActivityRomania", "User ID received: " + userId);
 
-                        addOldCountyButton.setOnClickListener(v -> {
-                            Toast.makeText(this, "Select a county to add as visited", Toast.LENGTH_SHORT).show();
-                            enableMapInteractivity();
-                        });
+            webView = findViewById(R.id.romaniaMap);
+            newPinButton = findViewById(R.id.newPinButton);
+            optionsLayout = findViewById(R.id.optionsLayout);
+            addOldCountyButton = findViewById(R.id.addOldCountyButton);
+            addCurrentCountyButton = findViewById(R.id.addCurrentCountyButton);
 
-                        addCurrentCountyButton.setOnClickListener(v -> addCurrentLocationToDatabase());
+            setupMap();
+
+            // Setare listener pentru butonul "New Pin"
+            newPinButton.setOnClickListener(v -> {
+                optionsLayout.setVisibility(View.VISIBLE);
+                historyContainer.setVisibility(View.GONE); // Ascunde istoricul
+            });
+
+            addOldCountyButton.setOnClickListener(v -> {
+                Toast.makeText(this, "Select a county to add as visited", Toast.LENGTH_SHORT).show();
+                enableMapInteractivity();
+            });
+
+            addCurrentCountyButton.setOnClickListener(v -> addCurrentLocationToDatabase());
+        }
+
+
+        private void loadVisitedCounties(int userId) {
+            apiService.getVisitedCounties(userId).enqueue(new Callback<List<String>>() {
+                @Override
+                public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<String> visitedCounties = response.body();
+                        if (!visitedCounties.isEmpty()) {
+                            for (String county : visitedCounties) {
+                                addPinToMap(county);
+                            }
+                        } else {
+                            Log.d("YourMapsActivityRomania", "No visited counties found for user.");
+                        }
+                    } else {
+                        Log.e("YourMapsActivityRomania", "Failed to fetch visited counties: " + response.code());
                     }
+                }
 
-                    @SuppressLint("SetJavaScriptEnabled")
+                @Override
+                public void onFailure(Call<List<String>> call, Throwable t) {
+                    Log.e("YourMapsActivityRomania", "Error fetching visited counties: " + t.getMessage());
+                }
+            });
+        }
+
+        private void loadVisitedCountiesDesc(long userId) {
+            apiService.getVisitedCounties(userId).enqueue(new Callback<List<String>>() {
+                @Override
+                public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<String> visitedCounties = response.body();
+
+                        // Transformă prescurtările în nume complete
+                        List<String> fullNames = new ArrayList<>();
+                        for (String code : visitedCounties) {
+                            String fullName = countyFullNames.getOrDefault(code, code); // Dacă nu există, afișează codul original
+                            fullNames.add(fullName);
+                        }
+
+                        // Sortează descrescător lista de nume
+                        Collections.reverse(fullNames);
+
+                        // Setează lista în adapter
+                        adapter = new VisitedCountiesAdapter(fullNames);
+                        visitedCountiesRecyclerView.setAdapter(adapter);
+
+                        // Afișează istoricul
+                        historyContainer.setVisibility(View.VISIBLE);
+                    } else {
+                        Log.e("YourMapsActivityRomania", "Failed to load counties: " + response.code());
+                        historyContainer.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<String>> call, Throwable t) {
+                    Log.e("YourMapsActivityRomania", "Error loading counties: " + t.getMessage());
+                    historyContainer.setVisibility(View.GONE);
+                }
+            });
+        }
+
+
+
+
+        private List<String> getVisitedCountiesFromDatabase(int userId) {
+            ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+
+            apiService.getVisitedCounties(userId).enqueue(new Callback<List<String>>() {
+                @Override
+                public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<String> visitedCounties = response.body();
+                        for (String county : visitedCounties) {
+                            addPinToMap(county);
+                        }
+                    } else {
+                        Log.e("YourMapsActivityRomania", "Failed to fetch visited counties: " + response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<String>> call, Throwable t) {
+                    Log.e("YourMapsActivityRomania", "Error fetching visited counties: " + t.getMessage());
+                }
+            });
+            return null;
+        }
+
+
+        private int getCurrentUserId() {
+            // Accesează SharedPreferences pentru a obține userId
+            SharedPreferences preferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
+            return preferences.getInt("user_id", -1); // -1 dacă nu este găsit
+        }
+
+        @SuppressLint("SetJavaScriptEnabled")
                     private void setupMap() {
                         WebSettings webSettings = webView.getSettings();
                         webSettings.setJavaScriptEnabled(true);

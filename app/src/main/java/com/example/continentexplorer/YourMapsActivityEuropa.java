@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -46,6 +47,7 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
     private Button addVisitedCountryButton, addCurrentCountryButton;
     private LinearLayout optionsLayout;
     private Long userId;
+    private ApiService apiService;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
@@ -126,11 +128,16 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
             return;
         }
 
+        apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+
         ImageView backArrow = findViewById(R.id.backButton);
         backArrow.setOnClickListener(view -> {
             // Navighează înapoi
             onBackPressed();
         });
+
+        // Încarcă județele vizitate din baza de date
+        loadVisitedCountries(Math.toIntExact(userId));
 
         Log.d("YourMapsActivityEuropa", "User ID received: " + userId);
 
@@ -153,6 +160,31 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
 
     }
 
+
+    private void loadVisitedCountries(int userId) {
+        apiService.getVisitedCountries(userId).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<String> visitedCountries = response.body();
+                    if (!visitedCountries.isEmpty()) {
+                        for (String country : visitedCountries) {
+                            addPinToMap(country);
+                        }
+                    } else {
+                        Log.d("YourMapsActivityEuropa", "No visited countries found for user.");
+                    }
+                } else {
+                    Log.e("YourMapsActivityEuropa", "Failed to fetch visited countries: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                Log.e("YourMapsActivityEuropa", "Error fetching visited countries: " + t.getMessage());
+            }
+        });
+    }
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371; // Raza Pământului în kilometri
