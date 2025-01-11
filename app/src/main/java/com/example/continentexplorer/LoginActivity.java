@@ -57,12 +57,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("LOGIN_RESPONSE", response.body().toString());
+                    // Extrage userId din răspuns
+                    Long userId = response.body().getId();
+                    Log.d("LOGIN_RESPONSE", "Logged in userId: " + userId);
+
+                    // Creează un Intent către LearningActivity
                     Intent intent = new Intent(LoginActivity.this, LearningActivity.class);
+                    intent.putExtra("userId", userId); // Trimite userId
                     startActivity(intent);
-                    finish();
+                    finish(); // Închide LoginActivity
                 } else {
-                    Log.d("LOGIN_ERROR", response.errorBody().toString());
+                    Log.d("LOGIN_ERROR", "Error: " + response.errorBody().toString());
                     Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -72,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
+
+
 }

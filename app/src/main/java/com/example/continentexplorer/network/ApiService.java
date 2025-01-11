@@ -5,6 +5,8 @@ import com.example.continentexplorer.dto.GuessRequest;
 import com.example.continentexplorer.dto.ScoreRequestEuropa;
 import com.example.continentexplorer.dto.ScoreRequestRomania;
 import com.example.continentexplorer.dto.ScoreResponse;
+import com.example.continentexplorer.dto.VisitedCountryRequest;
+import com.example.continentexplorer.dto.VisitedCountyRequest;
 import com.example.continentexplorer.model.Country;
 import com.example.continentexplorer.model.County;
 import com.example.continentexplorer.model.User;
@@ -57,7 +59,11 @@ public interface ApiService {
     @POST("/api/scores/saveRomania")
     Call<Void> saveRomaniaScore(@Body ScoreRequestRomania scoreRequest);
 
+    @POST("/api/visited-counties")
+    Call<Void> addVisitedCounty(@Body VisitedCountyRequest visitedCountyRequest);
 
+    @POST("/api/visited-countries")
+    Call<Void> addVisitedCountry(@Body VisitedCountryRequest visitedCountryRequest);
 
 
 //    @POST("/api/users/profile")

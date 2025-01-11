@@ -6,6 +6,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +34,7 @@ public class LearningActivityRomania extends AppCompatActivity {
     private County currentCounty;
     private int attemptsLeft = 3;
     private double totalScore = 0.0;
-    private Long userId = 1L;
+    private Long userId; // User ID va fi setat dinamic
     private Long gameId = 1L;
     private List<County> remainingCounties = new ArrayList<>();
     private Set<String> guessedCounties = new HashSet<>();
@@ -51,6 +52,23 @@ public class LearningActivityRomania extends AppCompatActivity {
         attemptsTextView = findViewById(R.id.attemptsTextView);
         pointsTextView = findViewById(R.id.pointsTextView);
         webView = findViewById(R.id.webview_romania_map);
+
+        // Setează userId dintr-o sursă globală (ex: SharedPreferences, Intent extras, sau un manager centralizat)
+        userId = getIntent().getLongExtra("userId", -1); // Exemplu: preluare din Intent
+        if (userId == -1) {
+            Toast.makeText(this, "User ID not found. Please login.", Toast.LENGTH_SHORT).show();
+            finish(); // Închide activitatea dacă userId nu este setat
+            return;
+        }
+
+        Log.d("LearningActivity", "User ID received: " + userId);
+
+
+        ImageView backArrow = findViewById(R.id.backButton);
+        backArrow.setOnClickListener(view -> {
+            // Navighează înapoi
+            onBackPressed();
+        });
 
         loadMapInWebView();
         loadAllCounties();
@@ -157,34 +175,33 @@ public class LearningActivityRomania extends AppCompatActivity {
 
 
     private void saveScoreToDatabase(boolean isCorrect, double pointsAwarded) {
-        boolean isFinalAttempt = remainingCounties.isEmpty(); // Verifică doar dacă lista este goală
+        boolean isFinalAttempt = remainingCounties.isEmpty();
         double updatedTotalScore = totalScore;
-
-        long attemptTime = System.currentTimeMillis(); // Obține timpul curent
+        long attemptTime = System.currentTimeMillis();
 
         ScoreRequestRomania scoreRequest = new ScoreRequestRomania(
                 userId, gameId, currentCounty.getCountyId(), attemptNumber, pointsAwarded, updatedTotalScore, isFinalAttempt, attemptTime
         );
 
-        Log.d(TAG, "Saving score: " + scoreRequest.toString());
+        Log.d(TAG, "Saving score for userId " + userId + ": " + scoreRequest.toString());
 
         apiService.saveRomaniaScore(scoreRequest).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "Score saved successfully.");
+                    Log.d(TAG, "Score saved successfully for userId " + userId);
 
                     if (isCorrect || attemptsLeft == 0) {
                         attemptNumber = 1;
                     }
                 } else {
-                    Log.e(TAG, "Failed to save score. Code: " + response.code() + ", Error: " + response.message());
+                    Log.e(TAG, "Failed to save score for userId " + userId + ". Code: " + response.code() + ", Error: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e(TAG, "Failed to connect to server for saving score", t);
+                Log.e(TAG, "Failed to connect to server for saving score for userId " + userId, t);
             }
         });
     }

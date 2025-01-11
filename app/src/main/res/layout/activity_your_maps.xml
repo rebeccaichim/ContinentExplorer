@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".YourMapsActivity">
+
+    <!-- Icon for Back Button -->
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_back"
+        android:contentDescription="Back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp" />
+
+    <!-- Learning Title -->
+    <TextView
+        android:id="@+id/yourmapsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Maps"
+        android:textSize="24sp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/inter_regular"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="40dp" />
+
+    <!-- Section: Europe -->
+    <TextView
+        android:id="@+id/sectionEurope"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EUROPE"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/yourmapsTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp" />
+
+    <!-- Europe Map Image -->
+    <ImageView
+        android:id="@+id/europeMap"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:src="@drawable/europe_image"
+        app:layout_constraintTop_toBottomOf="@id/sectionEurope"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Europe Start Button -->
+    <Button
+        android:id="@+id/startYourMapsEuropeButton"
+        android:layout_width="150dp"
+        android:layout_height="35dp"
+        android:text="Enter"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/europeMap"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Section: Romania -->
+    <TextView
+        android:id="@+id/sectionRomania"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ROMANIA"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/startYourMapsEuropeButton"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp" />
+
+    <!-- Romania Map Image -->
+    <ImageView
+        android:id="@+id/romaniaMap"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:src="@drawable/romania_image"
+        app:layout_constraintTop_toBottomOf="@id/sectionRomania"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Romania Start Button -->
+    <Button
+        android:id="@+id/startYourMapsRomaniaButton"
+        android:layout_width="150dp"
+        android:layout_height="35dp"
+        android:text="Enter"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/romaniaMap"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:menu="@menu/bottom_nav_menu"
+        android:background="@color/white"
+        app:itemIconTint="@color/colorPrimary"
+        app:itemTextColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
