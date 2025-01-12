@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Culoarea când textul este apăsat -->
+    <item android:color="@color/grey_text" android:state_pressed="true" />
+    <!-- Culoarea când textul este focalizat (cursorul pe desktop sau touch pe mobil) -->
+    <item android:color="@color/grey_text" android:state_focused="true" />
+    <!-- Culoarea normală -->
+    <item android:color="@color/colorPrimary" />
+</selector>

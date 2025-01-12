@@ -1,7 +1,9 @@
 package com.example.continentexplorer.network;
 
+import com.example.continentexplorer.dto.CombinedScoresResponse;
 import com.example.continentexplorer.dto.GuessRequest;
 
+import com.example.continentexplorer.dto.Score;
 import com.example.continentexplorer.dto.ScoreRequestEuropa;
 import com.example.continentexplorer.dto.ScoreRequestRomania;
 import com.example.continentexplorer.dto.ScoreResponse;
@@ -15,6 +17,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Body;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 
@@ -72,5 +75,26 @@ public interface ApiService {
 
     @GET("visited-countries/{userId}")
     Call<List<String>> getVisitedCountries(@Path("userId") long userId);
+
+    @GET("scores/{userId}")
+    Call<List<Score>> getUserScores(@Path("userId") Long userId);
+
+    @GET("scores/romania/{userId}")
+    Call<List<Score>> getScoresRomania(@Path("userId") Long userId);
+
+    @GET("scores/europa/{userId}")
+    Call<List<Score>> getScoresEuropa(@Path("userId") Long userId);
+
+    @GET("users/users/{userId}")
+    Call<User> getUserProfile(@Path("userId") Long userId);
+
+    @GET("/api/scores/{userId}")
+    Call<CombinedScoresResponse> getAllScores(@Path("userId") Long userId);
+
+    @PUT("users/users/{userId}")
+    Call<Void> updateUserProfile(@Path("userId") Long userId, @Body User user);
+
+//    @PUT("/api/users/{userId}")
+//    Call<Void> updateUserProfile(@Path("userId") Long userId, @Body User user);
 
 }

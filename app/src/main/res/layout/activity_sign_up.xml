@@ -156,7 +156,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/log_in"
-        android:textColor="@color/text_shadow"
+        android:textColor="@color/text_selector"
+        android:background="@drawable/text_background"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintStart_toEndOf="@id/textViewAlreadyHaveAccount"
         app:layout_constraintTop_toTopOf="@id/textViewAlreadyHaveAccount" />
 

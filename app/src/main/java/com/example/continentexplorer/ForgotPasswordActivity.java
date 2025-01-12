@@ -1,4 +1,4 @@
 package com.example.continentexplorer;
 
-public class MapsActivity {
+public class ForgotPasswordActivity {
 }

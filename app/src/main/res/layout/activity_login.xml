@@ -128,7 +128,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/sign_up"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/text_selector"
+        android:background="@drawable/text_background"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintStart_toEndOf="@id/textViewDontHaveAccount"
         app:layout_constraintTop_toTopOf="@id/textViewDontHaveAccount" />
 

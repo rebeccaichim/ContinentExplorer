@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +39,13 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+
+        ImageView backArrow = findViewById(R.id.imageViewBack);
+        backArrow.setOnClickListener(view -> {
+            // Navighează înapoi
+            onBackPressed();
+        });
 
         fullnameEditText = findViewById(R.id.editTextFullName);
         emailEditText = findViewById(R.id.editTextEmail);
@@ -76,6 +85,14 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+
+        TextView textViewLogin = findViewById(R.id.textViewLogin);
+        textViewLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish(); // Închide activitatea curentă pentru a evita suprapunerea
+        });
+
     }
 
     private void registerUser(User user) {

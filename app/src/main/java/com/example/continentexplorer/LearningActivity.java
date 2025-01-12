@@ -72,14 +72,17 @@ public class LearningActivity extends AppCompatActivity {
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_learning) {
+                Log.d("BottomNav", "Navigating to LearningActivity");
                 return true; // Rămâi pe pagina curentă
             } else if (itemId == R.id.nav_maps) {
+                Log.d("BottomNav", "Navigating to YourMapsActivity");
                 Intent intent = new Intent(LearningActivity.this, YourMapsActivity.class);
                 intent.putExtra("userId", userId); // Transmite userId către YourMapsActivity
                 startActivity(intent);
                 overridePendingTransition(0, 0); // Dezactivează animația de tranziție
                 return true;
             } else if (itemId == R.id.nav_profile) {
+                Log.d("BottomNav", "Navigating to ProfileActivity");
                 Intent intent = new Intent(LearningActivity.this, ProfileActivity.class);
                 intent.putExtra("userId", userId); // Transmite userId către ProfileActivity
                 startActivity(intent);

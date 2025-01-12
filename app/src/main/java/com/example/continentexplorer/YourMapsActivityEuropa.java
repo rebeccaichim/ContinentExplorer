@@ -20,6 +20,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.continentexplorer.dto.Coordinates;
 import com.example.continentexplorer.dto.VisitedCountryRequest;
@@ -30,7 +32,9 @@ import com.google.android.gms.location.LocationServices;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -48,8 +52,68 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
     private LinearLayout optionsLayout;
     private Long userId;
     private ApiService apiService;
+    private RecyclerView visitedCountriesRecyclerView;
+    private VisitedCountriesAdapter adapter;
+    private LinearLayout historyContainer;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
+    private static final Map<String, String> countryFullNames = new HashMap<>();
+
+    static {
+        countryFullNames.put("EU-RU", "Rusia");
+        countryFullNames.put("EU-NL", "Olanda");
+        countryFullNames.put("EU-CY", "Cipru");
+        countryFullNames.put("EU-UA", "Ucraina");
+        countryFullNames.put("EU-TR", "Turcia");
+        countryFullNames.put("EU-SE", "Suedia");
+        countryFullNames.put("EU-SI", "Slovenia");
+        countryFullNames.put("EU-SK", "Slovakia");
+        countryFullNames.put("EU-RS", "Serbia");
+        countryFullNames.put("EU-RO", "Romania");
+        countryFullNames.put("EU-PT", "Portugalia");
+        countryFullNames.put("EU-PL", "Polonia");
+        countryFullNames.put("EU-NO", "Norvegia");
+        countryFullNames.put("EU-ME", "Muntenegru");
+        countryFullNames.put("EU-MK", "Macedonia");
+        countryFullNames.put("EU-MD", "Moldova");
+        countryFullNames.put("EU-LV", "Letonia");
+        countryFullNames.put("EU-LT", "Lituania");
+        countryFullNames.put("EU-XK", "Kosovo");
+        countryFullNames.put("EU-IS", "Islanda");
+        countryFullNames.put("EU-IE", "Irlanda");
+        countryFullNames.put("EU-HU", "Ungaria");
+        countryFullNames.put("EU-HR", "Croația");
+        countryFullNames.put("EU-GR", "Grecia");
+        countryFullNames.put("EU-GE", "Georgia");
+        countryFullNames.put("EU-FR", "Franța");
+        countryFullNames.put("EU-FI", "Finlanda");
+        countryFullNames.put("EU-EE", "Estonia");
+        countryFullNames.put("EU-ES", "Spania");
+        countryFullNames.put("EU-GB", "Regatul Unit");
+        countryFullNames.put("EU-DK", "Danemarca");
+        countryFullNames.put("EU-DE", "Germania");
+        countryFullNames.put("EU-CZ", "Cehia");
+        countryFullNames.put("EU-CH", "Elveția");
+        countryFullNames.put("EU-BY", "Belarus");
+        countryFullNames.put("EU-BA", "Bosnia și Herțegovina");
+        countryFullNames.put("EU-BG", "Bulgaria");
+        countryFullNames.put("EU-BE", "Belgia");
+        countryFullNames.put("EU-AZ", "Azerbaidjan");
+        countryFullNames.put("EU-AT", "Austria");
+        countryFullNames.put("EU-AM", "Armenia");
+        countryFullNames.put("EU-AL", "Albania");
+        countryFullNames.put("EU-IT", "Italia");
+        countryFullNames.put("EU-KZ", "Kazahstan");
+        countryFullNames.put("EU-AD", "Andorra");
+        countryFullNames.put("EU-SM", "San Marino");
+        countryFullNames.put("EU-VA", "Vatican");
+        countryFullNames.put("EU-MC", "Monaco");
+        countryFullNames.put("EU-LI", "Liechtenstein");
+        countryFullNames.put("EU-MT", "Malta");
+        countryFullNames.put("EU-LU", "Luxemburg");
+    }
+
 
     // Adaugă map-ul pentru coordonatele țărilor din Europa
     private static final Map<String, Coordinates> countryCoordinates = new HashMap<>();
@@ -136,8 +200,18 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
             onBackPressed();
         });
 
-        // Încarcă județele vizitate din baza de date
+        // Preia istoricul
+        historyContainer = findViewById(R.id.historyContainer);
+        visitedCountriesRecyclerView = findViewById(R.id.visitedCountriesRecyclerView);
+
+        // Configurare RecyclerView
+        visitedCountriesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
         loadVisitedCountries(Math.toIntExact(userId));
+
+        // Încarcă județele vizitate din baza de date
+        loadVisitedCountriesDesc(Math.toIntExact(userId));
 
         Log.d("YourMapsActivityEuropa", "User ID received: " + userId);
 
@@ -149,8 +223,11 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
 
         setupMap();
 
-        newPinButton.setOnClickListener(v -> optionsLayout.setVisibility(View.VISIBLE));
-
+// Setare listener pentru butonul "New Pin"
+        newPinButton.setOnClickListener(v -> {
+            optionsLayout.setVisibility(View.VISIBLE);
+            historyContainer.setVisibility(View.GONE); // Ascunde istoricul
+        });
         addVisitedCountryButton.setOnClickListener(v -> {
             Toast.makeText(this, "Select a country to add as visited", Toast.LENGTH_SHORT).show();
             enableMapInteractivity();
@@ -185,6 +262,44 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
             }
         });
     }
+
+    private void loadVisitedCountriesDesc(long userId) {
+        apiService.getVisitedCountries(userId).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<String> visitedCountries = response.body();
+
+                    // Transformă prescurtările în nume complete
+                    List<String> fullNames = new ArrayList<>();
+                    for (String code : visitedCountries) {
+                        String fullName = countryFullNames.getOrDefault(code, code); // Dacă nu există, afișează codul original
+                        fullNames.add(fullName);
+                    }
+
+                    // Sortează descrescător lista de nume
+                    Collections.reverse(fullNames);
+
+                    // Setează lista în adapter
+                    adapter = new VisitedCountriesAdapter(fullNames);
+                    visitedCountriesRecyclerView.setAdapter(adapter);
+
+                    // Afișează istoricul
+                    historyContainer.setVisibility(View.VISIBLE);
+                } else {
+                    Log.e("YourMapsActivityEuropa", "Failed to load counties: " + response.code());
+                    historyContainer.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                Log.e("YourMapsActivityEuropa", "Error loading counties: " + t.getMessage());
+                historyContainer.setVisibility(View.GONE);
+            }
+        });
+    }
+
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371; // Raza Pământului în kilometri

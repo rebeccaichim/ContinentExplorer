@@ -11,6 +11,18 @@ public class User {
     private String profileImageUrl;
 
 
+    // Constructor gol (necesar pentru Retrofit sau alte biblioteci)
+    public User() {}
+
+    // Constructor cu parametrii
+    public User(Long id, String fullName, String email, String gender, int age) {
+        this.id = id;
+        this.fullName = fullName;
+        this.email = email;
+        this.gender = gender;
+        this.age = age;
+    }
+
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }

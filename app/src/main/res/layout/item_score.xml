@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp"> <!-- Reducere padding general -->
+
+    <!-- Imaginea dinamică -->
+    <ImageView
+        android:id="@+id/mapImageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="Map Image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Container pentru text -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/mapImageView"
+        app:layout_constraintTop_toTopOf="@id/mapImageView"
+        app:layout_constraintBottom_toBottomOf="@id/mapImageView"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Data scorului -->
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="21.10.2024 20:05"
+            android:textSize="14sp"
+            android:textColor="@color/black" />
+
+        <!-- Scorul -->
+        <TextView
+            android:id="@+id/scoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80p"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

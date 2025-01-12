@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +32,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        ImageView backArrow = findViewById(R.id.imageViewBack);
+        backArrow.setOnClickListener(view -> {
+            // Navighează înapoi
+            onBackPressed();
+        });
+
         emailEditText = findViewById(R.id.editTextEmail);
         passwordEditText = findViewById(R.id.editTextPassword);
         loginButton = findViewById(R.id.buttonLogin);
@@ -46,6 +54,14 @@ public class LoginActivity extends AppCompatActivity {
                 loginUser(email, password);
             }
         });
+
+        TextView textViewLogin = findViewById(R.id.textViewSignUp);
+        textViewLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+            startActivity(intent);
+            finish(); // Închide activitatea curentă pentru a evita suprapunerea
+        });
+
     }
 
     private void loginUser(String email, String password) {
