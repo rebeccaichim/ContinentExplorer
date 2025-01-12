@@ -21,6 +21,7 @@ import com.example.continentexplorer.model.ScoreCountriesGame;
 import com.example.continentexplorer.model.User;
 import com.example.continentexplorer.network.ApiService;
 import com.example.continentexplorer.network.RetrofitClient;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,34 @@ public class ProfileActivity extends AppCompatActivity {
         // Încarcă datele utilizatorului
         loadUserProfile();
         loadUserScores();
+
+        // Configurare Bottom Navigation
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        // Highlight the current item in the navigation bar
+        bottomNavigationView.setSelectedItemId(R.id.nav_profile);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_learning) {
+                Intent intent = new Intent(ProfileActivity.this, LearningActivity.class);
+                intent.putExtra("userId", userId); // Transmite userId către LearningActivity
+                startActivity(intent);
+                overridePendingTransition(0, 0); // Dezactivează animația de tranziție
+                return true;
+            } else if (itemId == R.id.nav_maps) {
+                Intent intent = new Intent(ProfileActivity.this, YourMapsActivity.class);
+                intent.putExtra("userId", userId); // Transmite userId către YourMapsActivity
+                startActivity(intent);
+                overridePendingTransition(0, 0); // Dezactivează animația de tranziție
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                return true; // Rămâi pe pagina curentă
+            }
+
+            return false;
+        });
     }
 
     private void loadUserProfile() {
@@ -118,7 +147,7 @@ public class ProfileActivity extends AppCompatActivity {
                     // Filtrăm scorurile pentru Europa
                     List<Score> filteredEuropaScores = new ArrayList<>();
                     for (Score score : europaScores) {
-                        if (score.isFinalAttempt() && score.getAttemptNumber() == 1) {
+                        if (score.isFinalAttempt() && score.getPointsAwarded() == 1.00) { // Noile condiții
                             filteredEuropaScores.add(score);
                         }
                     }
@@ -140,6 +169,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 
@@ -166,10 +196,12 @@ public class ProfileActivity extends AppCompatActivity {
             score.setFromCountiesGame(false); // Este scor din Europa
             score.setFinalAttempt(europaScore.isFinalAttempt()); // Setează finalAttempt
             score.setAttemptNumber(europaScore.getAttemptNumber()); // Setează attemptNumber
+            score.setPointsAwarded(europaScore.getPointsAwarded()); // Setează pointsAwarded
             genericScores.add(score);
         }
         return genericScores;
     }
+
 
     private void logOut() {
         SharedPreferences sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);

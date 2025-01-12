@@ -105,4 +105,9 @@ public interface ApiService {
     @PUT("users/reset-password")
     Call<Void> resetPassword(@Body ResetPasswordRequest request);
 
+    @GET("visited-counties/{userId}")
+    Call<List<String>> getVisitedCountiess(@Path("userId") long userId);
+
+    @GET("visited-countries/{userId}")
+    Call<List<String>> getVisitedCountriess(@Path("userId") long userId);
 }

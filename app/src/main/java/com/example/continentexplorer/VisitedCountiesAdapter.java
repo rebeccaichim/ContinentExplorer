@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class VisitedCountiesAdapter extends RecyclerView.Adapter<VisitedCountiesAdapter.ViewHolder> {
-
-    private List<String> visitedCounties;
+    private final List<String> visitedCounties;
 
     public VisitedCountiesAdapter(List<String> visitedCounties) {
         this.visitedCounties = visitedCounties;
@@ -26,8 +25,8 @@ public class VisitedCountiesAdapter extends RecyclerView.Adapter<VisitedCounties
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String county = visitedCounties.get(position);
-        holder.countyTextView.setText(county);
+        String countyWithDate = visitedCounties.get(position);
+        holder.countyTextView.setText(countyWithDate);
     }
 
     @Override

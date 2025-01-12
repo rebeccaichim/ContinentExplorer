@@ -26,8 +26,8 @@ public class VisitedCountriesAdapter extends RecyclerView.Adapter<VisitedCountri
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String country = visitedCountries.get(position);
-        holder.countryTextView.setText(country);
+        String countryWithDate = visitedCountries.get(position);
+        holder.countryTextView.setText(countryWithDate);
     }
 
     @Override

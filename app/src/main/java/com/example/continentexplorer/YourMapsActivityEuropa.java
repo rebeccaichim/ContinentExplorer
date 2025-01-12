@@ -211,7 +211,7 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
         loadVisitedCountries(Math.toIntExact(userId));
 
         // Încarcă județele vizitate din baza de date
-        loadVisitedCountriesDesc(Math.toIntExact(userId));
+        loadVisitedCountriesDesc((long) Math.toIntExact(userId));
 
         Log.d("YourMapsActivityEuropa", "User ID received: " + userId);
 
@@ -265,43 +265,48 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
         });
     }
 
-    private void loadVisitedCountriesDesc(long userId) {
+    private void loadVisitedCountriesDesc(Long userId) {
         apiService.getVisitedCountries(userId).enqueue(new Callback<List<String>>() {
             @Override
             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<String> visitedCountries = response.body();
 
-                    // Transformă prescurtările în nume complete
-                    List<String> fullNames = new ArrayList<>();
-                    for (String code : visitedCountries) {
-                        String fullName = countryFullNames.getOrDefault(code, code); // Dacă nu există, afișează codul original
-                        fullNames.add(fullName);
+                    // Transformă datele într-o listă cu nume complete și date
+                    List<String> fullNamesWithDates = new ArrayList<>();
+                    for (String countryWithDate : visitedCountries) {
+                        String[] parts = countryWithDate.split(" "); // Presupunem formatul "RO-XX (data)"
+                        String countryCode = parts[0];
+                        addPinToMap(countryCode); // Adaugă pinul pe hartă
+                        String visitedDate = parts[1]; // "(data)"
+
+                        // Înlocuiește codul județului cu numele complet
+                        String countryName = countryFullNames.getOrDefault(countryCode, countryCode);
+                        fullNamesWithDates.add(countryName + " " + visitedDate); // Ex. "Alba (2025-07-01)"
                     }
 
                     // Sortează descrescător lista de nume
-                    Collections.reverse(fullNames);
+                    Collections.reverse(fullNamesWithDates);
 
                     // Setează lista în adapter
-                    adapter = new VisitedCountriesAdapter(fullNames);
+                    adapter = new VisitedCountriesAdapter(fullNamesWithDates);
                     visitedCountriesRecyclerView.setAdapter(adapter);
 
                     // Afișează istoricul
                     toggleLayouts(false);
                 } else {
-                    Log.e("YourMapsActivityEuropa", "Failed to load counties: " + response.code());
+                    Log.e("YourMapsActivityEuropa", "Failed to load countries: " + response.code());
                     historyContainer.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<List<String>> call, Throwable t) {
-                Log.e("YourMapsActivityEuropa", "Error loading counties: " + t.getMessage());
+                Log.e("YourMapsActivityEuropa", "Error fetching visited counties: " + t.getMessage());
                 historyContainer.setVisibility(View.GONE);
             }
         });
     }
-
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371; // Raza Pământului în kilometri

@@ -193,7 +193,7 @@
             loadVisitedCounties(Math.toIntExact(userId));
 
             // Încarcă județele vizitate din baza de date
-            loadVisitedCountiesDesc(Math.toIntExact(userId));
+            loadVisitedCountiesDesc((long) Math.toIntExact(userId));
 
             Log.d("YourMapsActivityRomania", "User ID received: " + userId);
 
@@ -247,25 +247,31 @@
             });
         }
 
-        private void loadVisitedCountiesDesc(long userId) {
+        private void loadVisitedCountiesDesc(Long userId) {
             apiService.getVisitedCounties(userId).enqueue(new Callback<List<String>>() {
                 @Override
                 public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         List<String> visitedCounties = response.body();
 
-                        // Transformă prescurtările în nume complete
-                        List<String> fullNames = new ArrayList<>();
-                        for (String code : visitedCounties) {
-                            String fullName = countyFullNames.getOrDefault(code, code); // Dacă nu există, afișează codul original
-                            fullNames.add(fullName);
+                        // Transformă datele într-o listă cu nume complete și date
+                        List<String> fullNamesWithDates = new ArrayList<>();
+                        for (String countyWithDate : visitedCounties) {
+                            String[] parts = countyWithDate.split(" "); // Presupunem formatul "RO-XX (data)"
+                            String countyCode = parts[0];
+                            addPinToMap(countyCode); // Adaugă pinul pe hartă
+                            String visitedDate = parts[1]; // "(data)"
+
+                            // Înlocuiește codul județului cu numele complet
+                            String countyName = countyFullNames.getOrDefault(countyCode, countyCode);
+                            fullNamesWithDates.add(countyName + " " + visitedDate); // Ex. "Alba (2025-07-01)"
                         }
 
                         // Sortează descrescător lista de nume
-                        Collections.reverse(fullNames);
+                        Collections.reverse(fullNamesWithDates);
 
                         // Setează lista în adapter
-                        adapter = new VisitedCountiesAdapter(fullNames);
+                        adapter = new VisitedCountiesAdapter(fullNamesWithDates);
                         visitedCountiesRecyclerView.setAdapter(adapter);
 
                         // Afișează istoricul
@@ -278,11 +284,13 @@
 
                 @Override
                 public void onFailure(Call<List<String>> call, Throwable t) {
-                    Log.e("YourMapsActivityRomania", "Error loading counties: " + t.getMessage());
+                    Log.e("YourMapsActivityRomania", "Error fetching visited counties: " + t.getMessage());
                     historyContainer.setVisibility(View.GONE);
                 }
             });
         }
+
+
 
         // Comută între opțiuni și istoricul locurilor vizitate
         private void toggleLayouts(boolean showOptions) {
