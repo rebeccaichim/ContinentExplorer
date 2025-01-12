@@ -115,11 +115,19 @@ public class ProfileActivity extends AppCompatActivity {
                     List<Score> romaniaScores = mapRomaniaScoresToGeneric(scores.getRomaniaScores());
                     List<Score> europaScores = mapEuropaScoresToGeneric(scores.getEuropaScores());
 
+                    // Filtrăm scorurile pentru Europa
+                    List<Score> filteredEuropaScores = new ArrayList<>();
+                    for (Score score : europaScores) {
+                        if (score.isFinalAttempt() && score.getAttemptNumber() == 1) {
+                            filteredEuropaScores.add(score);
+                        }
+                    }
+
                     // Setăm adapterele
                     ScoresAdapter romaniaAdapter = new ScoresAdapter(romaniaScores);
                     scoresRecyclerView.setAdapter(romaniaAdapter);
 
-                    ScoresAdapter europaAdapter = new ScoresAdapter(europaScores);
+                    ScoresAdapter europaAdapter = new ScoresAdapter(filteredEuropaScores); // Doar scorurile filtrate
                     europaScoresRecyclerView.setAdapter(europaAdapter);
                 } else {
                     Toast.makeText(ProfileActivity.this, "Failed to load scores.", Toast.LENGTH_SHORT).show();
@@ -133,6 +141,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+
+
+
     private List<Score> mapRomaniaScoresToGeneric(List<ScoreCountiesGame> romaniaScores) {
         List<Score> genericScores = new ArrayList<>();
         for (ScoreCountiesGame romaniaScore : romaniaScores) {
@@ -140,6 +151,7 @@ public class ProfileActivity extends AppCompatActivity {
             score.setAttemptTime(romaniaScore.getAttemptTime());
             score.setTotalScore(romaniaScore.getTotalScore());
             score.setFromCountiesGame(true); // Este scor din România
+
             genericScores.add(score);
         }
         return genericScores;
@@ -152,6 +164,8 @@ public class ProfileActivity extends AppCompatActivity {
             score.setAttemptTime(europaScore.getAttemptTime());
             score.setTotalScore(europaScore.getTotalScore());
             score.setFromCountiesGame(false); // Este scor din Europa
+            score.setFinalAttempt(europaScore.isFinalAttempt()); // Setează finalAttempt
+            score.setAttemptNumber(europaScore.getAttemptNumber()); // Setează attemptNumber
             genericScores.add(score);
         }
         return genericScores;

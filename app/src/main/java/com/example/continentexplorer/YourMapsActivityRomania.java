@@ -205,19 +205,21 @@
 
             setupMap();
 
-            // Setare listener pentru butonul "New Pin"
+            // Listener pentru butonul "New Pin"
             newPinButton.setOnClickListener(v -> {
-                optionsLayout.setVisibility(View.VISIBLE);
-                historyContainer.setVisibility(View.GONE); // Ascunde istoricul
+                toggleLayouts(true); // Afișează opțiunile "What do you want to do?"
             });
+
 
             addOldCountyButton.setOnClickListener(v -> {
                 Toast.makeText(this, "Select a county to add as visited", Toast.LENGTH_SHORT).show();
                 enableMapInteractivity();
             });
 
-            addCurrentCountyButton.setOnClickListener(v -> addCurrentLocationToDatabase());
-        }
+            addCurrentCountyButton.setOnClickListener(v -> {
+                addCurrentLocationToDatabase();
+                toggleLayouts(false); // Afișează istoricul locurilor vizitate
+            });        }
 
 
         private void loadVisitedCounties(int userId) {
@@ -267,7 +269,7 @@
                         visitedCountiesRecyclerView.setAdapter(adapter);
 
                         // Afișează istoricul
-                        historyContainer.setVisibility(View.VISIBLE);
+                        toggleLayouts(false);
                     } else {
                         Log.e("YourMapsActivityRomania", "Failed to load counties: " + response.code());
                         historyContainer.setVisibility(View.GONE);
@@ -282,39 +284,17 @@
             });
         }
 
-
-
-
-        private List<String> getVisitedCountiesFromDatabase(int userId) {
-            ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
-
-            apiService.getVisitedCounties(userId).enqueue(new Callback<List<String>>() {
-                @Override
-                public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        List<String> visitedCounties = response.body();
-                        for (String county : visitedCounties) {
-                            addPinToMap(county);
-                        }
-                    } else {
-                        Log.e("YourMapsActivityRomania", "Failed to fetch visited counties: " + response.message());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<String>> call, Throwable t) {
-                    Log.e("YourMapsActivityRomania", "Error fetching visited counties: " + t.getMessage());
-                }
-            });
-            return null;
+        // Comută între opțiuni și istoricul locurilor vizitate
+        private void toggleLayouts(boolean showOptions) {
+            if (showOptions) {
+                optionsLayout.setVisibility(View.VISIBLE);
+                historyContainer.setVisibility(View.GONE); // Ascunde istoricul
+            } else {
+                optionsLayout.setVisibility(View.GONE);
+                historyContainer.setVisibility(View.VISIBLE); // Afișează istoricul
+            }
         }
 
-
-        private int getCurrentUserId() {
-            // Accesează SharedPreferences pentru a obține userId
-            SharedPreferences preferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
-            return preferences.getInt("user_id", -1); // -1 dacă nu este găsit
-        }
 
         @SuppressLint("SetJavaScriptEnabled")
                     private void setupMap() {
@@ -363,6 +343,10 @@
                                     Log.d("YourMapsActivityRomania", "County saved successfully!");
                                     Toast.makeText(YourMapsActivityRomania.this, "County saved successfully!", Toast.LENGTH_SHORT).show();
                                     addPinToMap(countyId);
+                                    // Actualizează istoricul locurilor vizitate
+                                    loadVisitedCountiesDesc(userId);
+                                    toggleLayouts(false); // Comută la istoricul locurilor vizitate
+
                                 } else {
                                     Log.e("YourMapsActivityRomania", "Failed to save county: " + response.code() + " - " + response.message());
                                     Toast.makeText(YourMapsActivityRomania.this, "Failed to save county.", Toast.LENGTH_SHORT).show();

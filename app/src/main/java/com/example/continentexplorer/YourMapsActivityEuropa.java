@@ -225,16 +225,18 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
 
 // Setare listener pentru butonul "New Pin"
         newPinButton.setOnClickListener(v -> {
-            optionsLayout.setVisibility(View.VISIBLE);
-            historyContainer.setVisibility(View.GONE); // Ascunde istoricul
+            toggleLayouts(true); // Afișează opțiunile "What do you want to do?"
         });
+
         addVisitedCountryButton.setOnClickListener(v -> {
             Toast.makeText(this, "Select a country to add as visited", Toast.LENGTH_SHORT).show();
             enableMapInteractivity();
         });
 
-        addCurrentCountryButton.setOnClickListener(v -> addCurrentLocationToDatabase());
-
+        addCurrentCountryButton.setOnClickListener(v -> {
+            addCurrentLocationToDatabase();
+            toggleLayouts(false); // Afișează istoricul locurilor vizitate
+        });
     }
 
 
@@ -285,7 +287,7 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
                     visitedCountriesRecyclerView.setAdapter(adapter);
 
                     // Afișează istoricul
-                    historyContainer.setVisibility(View.VISIBLE);
+                    toggleLayouts(false);
                 } else {
                     Log.e("YourMapsActivityEuropa", "Failed to load counties: " + response.code());
                     historyContainer.setVisibility(View.GONE);
@@ -453,6 +455,10 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
                     Log.d("YourMapsActivityEuropa", "Country saved successfully!");
                     Toast.makeText(YourMapsActivityEuropa.this, "Country saved successfully!", Toast.LENGTH_SHORT).show();
                     addPinToMap(countryId);
+                    // Actualizează istoricul locurilor vizitate
+                    loadVisitedCountriesDesc(userId);
+                    toggleLayouts(false); // Comută la istoricul locurilor vizitate
+
                 } else {
                     Log.e("YourMapsActivityEuropa", "Failed to save country: " + response.code() + " - " + response.message());
                     Toast.makeText(YourMapsActivityEuropa.this, "Failed to save country.", Toast.LENGTH_SHORT).show();
@@ -465,6 +471,17 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
                 Toast.makeText(YourMapsActivityEuropa.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // Comută între opțiuni și istoricul locurilor vizitate
+    private void toggleLayouts(boolean showOptions) {
+        if (showOptions) {
+            optionsLayout.setVisibility(View.VISIBLE);
+            historyContainer.setVisibility(View.GONE); // Ascunde istoricul
+        } else {
+            optionsLayout.setVisibility(View.GONE);
+            historyContainer.setVisibility(View.VISIBLE); // Afișează istoricul
+        }
     }
 
     private String formatDate(String date) {

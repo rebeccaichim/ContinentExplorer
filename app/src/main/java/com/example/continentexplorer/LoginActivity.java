@@ -62,6 +62,12 @@ public class LoginActivity extends AppCompatActivity {
             finish(); // Închide activitatea curentă pentru a evita suprapunerea
         });
 
+        TextView forgotPasswordTextView = findViewById(R.id.textViewForgotPassword);
+        forgotPasswordTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     private void loginUser(String email, String password) {

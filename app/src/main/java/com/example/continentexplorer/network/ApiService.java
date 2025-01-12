@@ -3,6 +3,8 @@ package com.example.continentexplorer.network;
 import com.example.continentexplorer.dto.CombinedScoresResponse;
 import com.example.continentexplorer.dto.GuessRequest;
 
+import com.example.continentexplorer.dto.PasswordResetRequest;
+import com.example.continentexplorer.dto.ResetPasswordRequest;
 import com.example.continentexplorer.dto.Score;
 import com.example.continentexplorer.dto.ScoreRequestEuropa;
 import com.example.continentexplorer.dto.ScoreRequestRomania;
@@ -13,12 +15,15 @@ import com.example.continentexplorer.model.Country;
 import com.example.continentexplorer.model.County;
 import com.example.continentexplorer.model.User;
 import java.util.List;
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Body;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 
 public interface ApiService {
@@ -94,7 +99,10 @@ public interface ApiService {
     @PUT("users/users/{userId}")
     Call<Void> updateUserProfile(@Path("userId") Long userId, @Body User user);
 
-//    @PUT("/api/users/{userId}")
-//    Call<Void> updateUserProfile(@Path("userId") Long userId, @Body User user);
+    @POST("users/check-email")
+    Call<Map<String, String>> checkEmail(@Body PasswordResetRequest request);
+
+    @PUT("users/reset-password")
+    Call<Void> resetPassword(@Body ResetPasswordRequest request);
 
 }

@@ -5,6 +5,8 @@ public class Score {
     private String attemptTime;
     private double totalScore;
     private boolean fromCountiesGame;
+    private int attemptNumber; // Adăugat pentru a marca dacă este scorul final
+    private boolean isFinalAttempt;
 
 
     // Getters and Setters
@@ -38,5 +40,21 @@ public class Score {
 
     public void setFromCountiesGame(boolean fromCountiesGame) {
         this.fromCountiesGame = fromCountiesGame;
+    }
+
+    public int getAttemptNumber() {
+        return attemptNumber;
+    }
+
+    public void setAttemptNumber(int attemptNumber) {
+        this.attemptNumber = attemptNumber;
+    }
+
+    public boolean isFinalAttempt() {
+        return isFinalAttempt;
+    }
+
+    public void setFinalAttempt(boolean finalAttempt) {
+        isFinalAttempt = finalAttempt;
     }
 }
