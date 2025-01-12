@@ -1,6 +1,5 @@
 package com.example.continentexplorer;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
@@ -36,7 +35,7 @@ public class LearningActivityEuropa extends AppCompatActivity {
     private int attemptsLeft = 3;
     private double totalScore = 0.0;
     private Long userId;
-    private Long gameId = 2L; // ID-ul pentru jocul cu Europa
+    private Long gameId = 2L;
     private List<Country> remainingCountries = new ArrayList<>();
     private Set<String> guessedCountries = new HashSet<>();
     private int attemptNumber = 1;
@@ -48,21 +47,17 @@ public class LearningActivityEuropa extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_learning_europa);
 
-        // Preluăm userId din Intent
         userId = getIntent().getLongExtra("userId", -1);
         if (userId == -1) {
-            Log.e(TAG, "User ID not found. Redirecting to Login.");
-            finish(); // Închide activitatea curentă
+            finish();
             return;
         }
 
         ImageView backArrow = findViewById(R.id.backButton);
         backArrow.setOnClickListener(view -> {
-            // Navighează înapoi
             onBackPressed();
         });
 
-        Log.d(TAG, "User ID received: " + userId);
 
         apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
         guessTextView = findViewById(R.id.guessTextView);
@@ -84,7 +79,6 @@ public class LearningActivityEuropa extends AppCompatActivity {
         webView.addJavascriptInterface(new Object() {
             @JavascriptInterface
             public void onCountrySelected(String countryId) {
-                Log.d(TAG, "Country selected from JavaScript: " + countryId);
                 runOnUiThread(() -> handleCountrySelection(countryId));
             }
 
@@ -94,7 +88,6 @@ public class LearningActivityEuropa extends AppCompatActivity {
             }
         }, "Android");
 
-        Log.d(TAG, "Loading SVG map into WebView.");
         webView.loadUrl("file:///android_res/raw/europe.svg");
     }
 
@@ -119,8 +112,7 @@ public class LearningActivityEuropa extends AppCompatActivity {
 
     private void loadRandomCountry() {
         if (remainingCountries.isEmpty()) {
-            Log.d(TAG, "Game Over! Remaining countries: " + remainingCountries.size());
-            saveScoreToDatabase(true, 0.0); // Ultimul scor salvat cu isFinalAttempt = true
+            saveScoreToDatabase(true, 0.0);
             Toast.makeText(this, "Game over! You've guessed all countries!", Toast.LENGTH_LONG).show();
             return;
         }
@@ -132,9 +124,8 @@ public class LearningActivityEuropa extends AppCompatActivity {
 
         guessTextView.setText("Guess: " + currentCountry.getCountryName());
         attemptsLeft = 3;
-        attemptNumber = 1; // Resetăm attemptNumber la fiecare nouă țară
+        attemptNumber = 1;
         attemptsTextView.setText("Attempts left: " + attemptsLeft);
-        Log.d(TAG, "Random country loaded: " + currentCountry.getCountryName());
     }
 
     private void handleCountrySelection(String countryId) {
@@ -179,7 +170,6 @@ public class LearningActivityEuropa extends AppCompatActivity {
 
     private void saveScoreToDatabase(boolean isCorrect, double pointsAwarded) {
         boolean isFinalAttempt = remainingCountries.isEmpty();
-        Log.d(TAG, "isFinalAttempt: " + isFinalAttempt);
         double updatedTotalScore = totalScore;
 
         long attemptTime = System.currentTimeMillis();
@@ -192,8 +182,6 @@ public class LearningActivityEuropa extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "Score saved successfully.");
-
                     if (isCorrect || attemptsLeft == 0) {
                         attemptNumber = 1;
                     }

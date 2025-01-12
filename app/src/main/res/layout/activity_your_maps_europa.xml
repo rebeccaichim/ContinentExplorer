@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- Back Button -->
     <ImageView
         android:id="@+id/backButton"
         android:layout_width="25dp"
@@ -18,7 +17,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp" />
 
-    <!-- Title -->
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -32,7 +30,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="40dp" />
 
-    <!-- Map -->
     <WebView
         android:id="@+id/europaMap"
         android:layout_width="match_parent"
@@ -42,7 +39,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
-    <!-- New Pin Button -->
     <Button
         android:id="@+id/newPinButton"
         android:layout_width="150dp"
@@ -55,7 +51,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
-    <!-- History Container -->
     <LinearLayout
         android:id="@+id/historyContainer"
         android:layout_width="match_parent"
@@ -70,22 +65,22 @@
             android:id="@+id/historyTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="List of Countries Visited"
+            android:text="List of Visited Countries"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:textColor="@color/black" />
+            android:textColor="@color/colorPrimary" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/visitedCountriesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:textColor="@color/colorPrimary"
             android:scrollbars="vertical" />
     </LinearLayout>
 
-    <!-- Options -->
     <LinearLayout
         android:id="@+id/optionsLayout"
         android:visibility="gone"

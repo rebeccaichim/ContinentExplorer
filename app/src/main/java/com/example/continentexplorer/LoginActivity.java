@@ -34,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
 
         ImageView backArrow = findViewById(R.id.imageViewBack);
         backArrow.setOnClickListener(view -> {
-            // Navighează înapoi
             onBackPressed();
         });
 
@@ -59,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         textViewLogin.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
             startActivity(intent);
-            finish(); // Închide activitatea curentă pentru a evita suprapunerea
+            finish();
         });
 
         TextView forgotPasswordTextView = findViewById(R.id.textViewForgotPassword);
@@ -79,17 +78,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Extrage userId din răspuns
                     Long userId = response.body().getId();
-                    Log.d("LOGIN_RESPONSE", "Logged in userId: " + userId);
 
-                    // Creează un Intent către LearningActivity
                     Intent intent = new Intent(LoginActivity.this, LearningActivity.class);
-                    intent.putExtra("userId", userId); // Trimite userId
+                    intent.putExtra("userId", userId);
                     startActivity(intent);
-                    finish(); // Închide LoginActivity
+                    finish();
                 } else {
-                    Log.d("LOGIN_ERROR", "Error: " + response.errorBody().toString());
                     Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
                 }
             }

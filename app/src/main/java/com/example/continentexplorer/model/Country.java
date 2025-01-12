@@ -8,7 +8,6 @@ public class Country {
     public Country() {
     }
 
-    // Getters și Setters
     public Long getCountryId() {
         return countryId;
     }

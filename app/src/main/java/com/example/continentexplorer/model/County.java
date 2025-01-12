@@ -8,7 +8,6 @@ public class County {
     public County() {
     }
 
-    // Getters și Setters
     public Long getCountyId() {
         return countyId;
     }

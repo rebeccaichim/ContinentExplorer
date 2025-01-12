@@ -1,7 +1,5 @@
 package com.example.continentexplorer;
 
-import static com.example.continentexplorer.YourMapsActivityRomania.LOCATION_PERMISSION_REQUEST_CODE;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -114,78 +112,70 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
         countryFullNames.put("EU-LU", "Luxemburg");
     }
 
-
-    // Adaugă map-ul pentru coordonatele țărilor din Europa
     private static final Map<String, Coordinates> countryCoordinates = new HashMap<>();
 
     static {
-        // Coordonate centrale pentru țările din Europa
-        countryCoordinates.put("EU-RU", new Coordinates(61.5240, 105.3188)); // Rusia
-        countryCoordinates.put("EU-NL", new Coordinates(52.1326, 5.2913)); // Olanda
-        countryCoordinates.put("EU-CY", new Coordinates(35.1264, 33.4299)); // Cipru
-        countryCoordinates.put("EU-UA", new Coordinates(48.3794, 31.1656)); // Ucraina
-        countryCoordinates.put("EU-TR", new Coordinates(38.9637, 35.2433)); // Turcia
-        countryCoordinates.put("EU-SE", new Coordinates(60.1282, 18.6435)); // Suedia
-        countryCoordinates.put("EU-SI", new Coordinates(46.1512, 14.9955)); // Slovenia
-        countryCoordinates.put("EU-SK", new Coordinates(48.6690, 19.6990)); // Slovakia
-        countryCoordinates.put("EU-RS", new Coordinates(44.0165, 21.0059)); // Serbia
-        countryCoordinates.put("EU-RO", new Coordinates(45.9432, 24.9668)); // Romania
-        countryCoordinates.put("EU-PT", new Coordinates(39.3999, -8.2245)); // Portugal
-        countryCoordinates.put("EU-PL", new Coordinates(51.9194, 19.1451)); // Poland
-        countryCoordinates.put("EU-NO", new Coordinates(60.4720, 8.4689)); // Norway
-        countryCoordinates.put("EU-ME", new Coordinates(42.7087, 19.3744)); // Montenegro
-        countryCoordinates.put("EU-MK", new Coordinates(41.6086, 21.7453)); // Macedonia
-        countryCoordinates.put("EU-MD", new Coordinates(47.4116, 28.3699)); // Moldova
-        countryCoordinates.put("EU-LV", new Coordinates(56.8796, 24.6032)); // Letonia (Latvia)
-        countryCoordinates.put("EU-LT", new Coordinates(55.1694, 23.8813)); // Lituania (Lithuania)
-        countryCoordinates.put("EU-XK", new Coordinates(42.6026, 20.9028)); // Kosovo
-        countryCoordinates.put("EU-IS", new Coordinates(64.9631, -19.0208)); // Iceland
-        countryCoordinates.put("EU-IE", new Coordinates(53.4129, -8.2439)); // Ireland
-        countryCoordinates.put("EU-HU", new Coordinates(47.1625, 19.5033)); // Hungary
-        countryCoordinates.put("EU-HR", new Coordinates(45.1, 15.2)); // Croatia
-        countryCoordinates.put("EU-GR", new Coordinates(39.0742, 21.8243)); // Greece
-        countryCoordinates.put("EU-GE", new Coordinates(42.3154, 43.3569)); // Georgia
-        countryCoordinates.put("EU-FR", new Coordinates(46.6034, 1.8883)); // France
-        countryCoordinates.put("EU-FI", new Coordinates(61.9241, 25.7482)); // Finland
-        countryCoordinates.put("EU-EE", new Coordinates(58.5953, 25.0136)); // Estonia
-        countryCoordinates.put("EU-ES", new Coordinates(40.4637, -3.7492)); // Spania
-        countryCoordinates.put("EU-GB", new Coordinates(55.3781, -3.4360)); // Regatul Unit
-        countryCoordinates.put("EU-DK", new Coordinates(56.2639, 9.5018)); // Danemarca
-        countryCoordinates.put("EU-DE", new Coordinates(51.1657, 10.4515)); // Germania
-        countryCoordinates.put("EU-CZ", new Coordinates(49.8175, 15.4730)); // Cehia
-        countryCoordinates.put("EU-CH", new Coordinates(46.8182, 8.2275)); // Elveția
-        countryCoordinates.put("EU-BY", new Coordinates(53.9006, 27.5590)); // Belarus
-        countryCoordinates.put("EU-BA", new Coordinates(43.9159, 17.6791)); // Bosnia și Herțegovina
-        countryCoordinates.put("EU-BG", new Coordinates(42.7339, 25.4858)); // Bulgaria
-        countryCoordinates.put("EU-BE", new Coordinates(50.8503, 4.3517));  // Belgia
-        countryCoordinates.put("EU-AZ", new Coordinates(40.1431, 47.5769)); // Azerbaidjan
-        countryCoordinates.put("EU-AT", new Coordinates(47.5162, 14.5501)); // Austria
-        countryCoordinates.put("EU-AM", new Coordinates(40.0691, 45.0382)); // Armenia
-        countryCoordinates.put("EU-AL", new Coordinates(41.1533, 20.1683)); // Albania
-        countryCoordinates.put("EU-IT", new Coordinates(41.8719, 12.5674)); // Italia
-        countryCoordinates.put("EU-KZ", new Coordinates(48.0196, 66.9237)); // Kazahstan
-
-        countryCoordinates.put("EU-AD", new Coordinates(42.5078, 1.5211)); // Andorra (latitudine și longitudine aproximative)
-        countryCoordinates.put("EU-SM", new Coordinates(43.9336, 12.4500)); // San Marino
-        countryCoordinates.put("EU-VA", new Coordinates(41.9029, 12.4534)); // Vatican City
-        countryCoordinates.put("EU-MC", new Coordinates(43.7384, 7.4246)); // Monaco
-        countryCoordinates.put("EU-LI", new Coordinates(47.1660, 9.5554)); // Liechtenstein
-        countryCoordinates.put("EU-MT", new Coordinates(35.8997, 14.5146)); // Malta
-        countryCoordinates.put("EU-LU", new Coordinates(49.8153, 6.1296)); // Luxembourg
+        countryCoordinates.put("EU-RU", new Coordinates(61.5240, 105.3188));
+        countryCoordinates.put("EU-NL", new Coordinates(52.1326, 5.2913));
+        countryCoordinates.put("EU-CY", new Coordinates(35.1264, 33.4299));
+        countryCoordinates.put("EU-UA", new Coordinates(48.3794, 31.1656));
+        countryCoordinates.put("EU-TR", new Coordinates(38.9637, 35.2433));
+        countryCoordinates.put("EU-SE", new Coordinates(60.1282, 18.6435));
+        countryCoordinates.put("EU-SI", new Coordinates(46.1512, 14.9955));
+        countryCoordinates.put("EU-SK", new Coordinates(48.6690, 19.6990));
+        countryCoordinates.put("EU-RS", new Coordinates(44.0165, 21.0059));
+        countryCoordinates.put("EU-RO", new Coordinates(45.9432, 24.9668));
+        countryCoordinates.put("EU-PT", new Coordinates(39.3999, -8.2245));
+        countryCoordinates.put("EU-PL", new Coordinates(51.9194, 19.1451));
+        countryCoordinates.put("EU-NO", new Coordinates(60.4720, 8.4689));
+        countryCoordinates.put("EU-ME", new Coordinates(42.7087, 19.3744));
+        countryCoordinates.put("EU-MK", new Coordinates(41.6086, 21.7453));
+        countryCoordinates.put("EU-MD", new Coordinates(47.4116, 28.3699));
+        countryCoordinates.put("EU-LV", new Coordinates(56.8796, 24.6032));
+        countryCoordinates.put("EU-LT", new Coordinates(55.1694, 23.8813));
+        countryCoordinates.put("EU-XK", new Coordinates(42.6026, 20.9028));
+        countryCoordinates.put("EU-IS", new Coordinates(64.9631, -19.0208));
+        countryCoordinates.put("EU-IE", new Coordinates(53.4129, -8.2439));
+        countryCoordinates.put("EU-HU", new Coordinates(47.1625, 19.5033));
+        countryCoordinates.put("EU-HR", new Coordinates(45.1, 15.2));
+        countryCoordinates.put("EU-GR", new Coordinates(39.0742, 21.8243));
+        countryCoordinates.put("EU-GE", new Coordinates(42.3154, 43.3569));
+        countryCoordinates.put("EU-FR", new Coordinates(46.6034, 1.8883));
+        countryCoordinates.put("EU-FI", new Coordinates(61.9241, 25.7482));
+        countryCoordinates.put("EU-EE", new Coordinates(58.5953, 25.0136));
+        countryCoordinates.put("EU-ES", new Coordinates(40.4637, -3.7492));
+        countryCoordinates.put("EU-GB", new Coordinates(55.3781, -3.4360));
+        countryCoordinates.put("EU-DK", new Coordinates(56.2639, 9.5018));
+        countryCoordinates.put("EU-DE", new Coordinates(51.1657, 10.4515));
+        countryCoordinates.put("EU-CZ", new Coordinates(49.8175, 15.4730));
+        countryCoordinates.put("EU-CH", new Coordinates(46.8182, 8.2275));
+        countryCoordinates.put("EU-BY", new Coordinates(53.9006, 27.5590));
+        countryCoordinates.put("EU-BA", new Coordinates(43.9159, 17.6791));
+        countryCoordinates.put("EU-BG", new Coordinates(42.7339, 25.4858));
+        countryCoordinates.put("EU-BE", new Coordinates(50.8503, 4.3517));
+        countryCoordinates.put("EU-AZ", new Coordinates(40.1431, 47.5769));
+        countryCoordinates.put("EU-AT", new Coordinates(47.5162, 14.5501));
+        countryCoordinates.put("EU-AM", new Coordinates(40.0691, 45.0382));
+        countryCoordinates.put("EU-AL", new Coordinates(41.1533, 20.1683));
+        countryCoordinates.put("EU-IT", new Coordinates(41.8719, 12.5674));
+        countryCoordinates.put("EU-KZ", new Coordinates(48.0196, 66.9237));
+        countryCoordinates.put("EU-AD", new Coordinates(42.5078, 1.5211));
+        countryCoordinates.put("EU-SM", new Coordinates(43.9336, 12.4500));
+        countryCoordinates.put("EU-VA", new Coordinates(41.9029, 12.4534));
+        countryCoordinates.put("EU-MC", new Coordinates(43.7384, 7.4246));
+        countryCoordinates.put("EU-LI", new Coordinates(47.1660, 9.5554));
+        countryCoordinates.put("EU-MT", new Coordinates(35.8997, 14.5146));
+        countryCoordinates.put("EU-LU", new Coordinates(49.8153, 6.1296));
 
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_your_maps_europa);
 
-        // Preia userId
         this.userId = getIntent().getLongExtra("userId", -1);
         if (userId == -1) {
-            Log.e("YourMapsActivityEuropa", "User ID not found. Redirecting to Login.");
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
@@ -196,24 +186,17 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
 
         ImageView backArrow = findViewById(R.id.backButton);
         backArrow.setOnClickListener(view -> {
-            // Navighează înapoi
             onBackPressed();
         });
 
-        // Preia istoricul
         historyContainer = findViewById(R.id.historyContainer);
         visitedCountriesRecyclerView = findViewById(R.id.visitedCountriesRecyclerView);
 
-        // Configurare RecyclerView
         visitedCountriesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         loadVisitedCountries(Math.toIntExact(userId));
 
-        // Încarcă județele vizitate din baza de date
         loadVisitedCountriesDesc((long) Math.toIntExact(userId));
-
-        Log.d("YourMapsActivityEuropa", "User ID received: " + userId);
 
         webView = findViewById(R.id.europaMap);
         newPinButton = findViewById(R.id.newPinButton);
@@ -223,9 +206,8 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
 
         setupMap();
 
-// Setare listener pentru butonul "New Pin"
         newPinButton.setOnClickListener(v -> {
-            toggleLayouts(true); // Afișează opțiunile "What do you want to do?"
+            toggleLayouts(true);
         });
 
         addVisitedCountryButton.setOnClickListener(v -> {
@@ -235,7 +217,7 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
 
         addCurrentCountryButton.setOnClickListener(v -> {
             addCurrentLocationToDatabase();
-            toggleLayouts(false); // Afișează istoricul locurilor vizitate
+            toggleLayouts(false);
         });
     }
 
@@ -272,30 +254,24 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<String> visitedCountries = response.body();
 
-                    // Transformă datele într-o listă cu nume complete și date
                     List<String> fullNamesWithDates = new ArrayList<>();
                     for (String countryWithDate : visitedCountries) {
-                        String[] parts = countryWithDate.split(" "); // Presupunem formatul "RO-XX (data)"
+                        String[] parts = countryWithDate.split(" ");
                         String countryCode = parts[0];
-                        addPinToMap(countryCode); // Adaugă pinul pe hartă
-                        String visitedDate = parts[1]; // "(data)"
+                        addPinToMap(countryCode);
+                        String visitedDate = parts[1];
 
-                        // Înlocuiește codul județului cu numele complet
                         String countryName = countryFullNames.getOrDefault(countryCode, countryCode);
-                        fullNamesWithDates.add(countryName + " " + visitedDate); // Ex. "Alba (2025-07-01)"
+                        fullNamesWithDates.add(countryName + " " + visitedDate);
                     }
 
-                    // Sortează descrescător lista de nume
                     Collections.reverse(fullNamesWithDates);
 
-                    // Setează lista în adapter
                     adapter = new VisitedCountriesAdapter(fullNamesWithDates);
                     visitedCountriesRecyclerView.setAdapter(adapter);
 
-                    // Afișează istoricul
                     toggleLayouts(false);
                 } else {
-                    Log.e("YourMapsActivityEuropa", "Failed to load countries: " + response.code());
                     historyContainer.setVisibility(View.GONE);
                 }
             }
@@ -309,14 +285,14 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
     }
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        final int R = 6371; // Raza Pământului în kilometri
+        final int R = 6371;
         double latDistance = Math.toRadians(lat2 - lat1);
         double lonDistance = Math.toRadians(lon2 - lon1);
         double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
                 + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c; // Distanța în kilometri
+        return R * c;
     }
 
     private void getCurrentLocationAndSave() {
@@ -361,8 +337,6 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
                         double latitude = location.getLatitude();
                         double longitude = location.getLongitude();
 
-                        Log.d("YourMapsActivityEuropa", "Current location: " + latitude + ", " + longitude);
-
                         String currentCountryId = getCountryFromCoordinates(latitude, longitude);
 
                         if (currentCountryId.equals("Unknown")) {
@@ -372,15 +346,12 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
 
                         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
-                        Log.d("YourMapsActivityEuropa", "Detected country: " + currentCountryId + ", Date: " + currentDate);
-
                         saveVisitedCountryToDatabase(currentCountryId, currentDate);
                     } else {
                         Toast.makeText(this, "Unable to get location. Please try again.", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("YourMapsActivityEuropa", "Error getting location: " + e.getMessage());
                     Toast.makeText(this, "Failed to get location: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
@@ -410,8 +381,6 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
                 closestCountryId = entry.getKey();
             }
         }
-
-        Log.d("YourMapsActivityEuropa", "Closest country: " + closestCountryId + " with distance: " + shortestDistance);
         return closestCountryId;
     }
 
@@ -423,7 +392,6 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
         webSettings.setDisplayZoomControls(false);
         webView.addJavascriptInterface(new MapJavaScriptInterface(), "Android");
         webView.loadUrl("file:///android_res/raw/your_maps_europa.svg");
-        Log.d("YourMapsActivityEuropa", "SVG map loaded");
     }
 
     private void enableMapInteractivity() {
@@ -442,13 +410,10 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
     }
 
     private void saveVisitedCountryToDatabase(String countryId, String date) {
-        Log.d("YourMapsActivityEuropa", "Saving country: " + countryId + ", date: " + date);
-
         String formattedDate = formatDate(date);
         String visitedCountryName = countryId;
 
         Long continentId = 3L;
-        Log.d("YourMapsActivityEuropa", "User ID in request: " + userId);
 
         VisitedCountryRequest visitedCountryRequest = new VisitedCountryRequest(visitedCountryName, userId, formattedDate, continentId);
 
@@ -457,35 +422,30 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Log.d("YourMapsActivityEuropa", "Country saved successfully!");
                     Toast.makeText(YourMapsActivityEuropa.this, "Country saved successfully!", Toast.LENGTH_SHORT).show();
                     addPinToMap(countryId);
-                    // Actualizează istoricul locurilor vizitate
                     loadVisitedCountriesDesc(userId);
-                    toggleLayouts(false); // Comută la istoricul locurilor vizitate
+                    toggleLayouts(false);
 
                 } else {
-                    Log.e("YourMapsActivityEuropa", "Failed to save country: " + response.code() + " - " + response.message());
                     Toast.makeText(YourMapsActivityEuropa.this, "Failed to save country.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("YourMapsActivityEuropa", "Error: " + t.getMessage());
                 Toast.makeText(YourMapsActivityEuropa.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // Comută între opțiuni și istoricul locurilor vizitate
     private void toggleLayouts(boolean showOptions) {
         if (showOptions) {
             optionsLayout.setVisibility(View.VISIBLE);
-            historyContainer.setVisibility(View.GONE); // Ascunde istoricul
+            historyContainer.setVisibility(View.GONE);
         } else {
             optionsLayout.setVisibility(View.GONE);
-            historyContainer.setVisibility(View.VISIBLE); // Afișează istoricul
+            historyContainer.setVisibility(View.VISIBLE);
         }
     }
 
@@ -495,7 +455,6 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
             SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             return outputFormat.format(inputFormat.parse(date));
         } catch (ParseException e) {
-            Log.e("YourMapsActivityEuropa", "Error parsing date: " + e.getMessage());
             return date;
         }
     }
@@ -508,7 +467,6 @@ public class YourMapsActivityEuropa extends AppCompatActivity {
     private class MapJavaScriptInterface {
         @JavascriptInterface
         public void onCountrySelected(String countryId) {
-            Log.d("YourMapsActivityEuropa", "Selected country: " + countryId);
             runOnUiThread(() -> {
                 Toast.makeText(YourMapsActivityEuropa.this, "Country " + countryId + " selected", Toast.LENGTH_SHORT).show();
                 showDatePickerDialog(countryId);

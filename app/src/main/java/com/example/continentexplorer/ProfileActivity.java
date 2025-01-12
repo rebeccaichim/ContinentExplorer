@@ -43,25 +43,20 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // Inițializează API-ul
         apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
 
-        // Preia userId din Intent
         userId = getIntent().getLongExtra("userId", -1);
         if (userId == -1) {
-            // Dacă userId nu a fost primit corect, redirecționează utilizatorul către Login
-            Log.e("ProfileActivity", "User ID not found. Redirecting to Login.");
             navigateToWelcome();
             return;
         }
 
-        // Inițializează componentele UI
         userName = findViewById(R.id.userName);
         userGender = findViewById(R.id.userGender);
         userAge = findViewById(R.id.userAge);
         userEmail = findViewById(R.id.userEmail);
         scoresRecyclerView = findViewById(R.id.scoresRecyclerView);
-        europaScoresRecyclerView = findViewById(R.id.europaScoresRecyclerView); // Inițializare RecyclerView pentru Europa
+        europaScoresRecyclerView = findViewById(R.id.europaScoresRecyclerView);
         logOutButton = findViewById(R.id.logOutButton);
 
         ImageView backButton = findViewById(R.id.backButton);
@@ -72,20 +67,16 @@ public class ProfileActivity extends AppCompatActivity {
 
         logOutButton.setOnClickListener(v -> logOut());
 
-        // Configurează RecyclerView-urile pentru scoruri
         scoresRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         scoresRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        europaScoresRecyclerView.setLayoutManager(new LinearLayoutManager(this)); // Configurare LayoutManager pentru Europa
+        europaScoresRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Încarcă datele utilizatorului
         loadUserProfile();
         loadUserScores();
 
-        // Configurare Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Highlight the current item in the navigation bar
         bottomNavigationView.setSelectedItemId(R.id.nav_profile);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -93,18 +84,18 @@ public class ProfileActivity extends AppCompatActivity {
 
             if (itemId == R.id.nav_learning) {
                 Intent intent = new Intent(ProfileActivity.this, LearningActivity.class);
-                intent.putExtra("userId", userId); // Transmite userId către LearningActivity
+                intent.putExtra("userId", userId);
                 startActivity(intent);
-                overridePendingTransition(0, 0); // Dezactivează animația de tranziție
+                overridePendingTransition(0, 0);
                 return true;
             } else if (itemId == R.id.nav_maps) {
                 Intent intent = new Intent(ProfileActivity.this, YourMapsActivity.class);
-                intent.putExtra("userId", userId); // Transmite userId către YourMapsActivity
+                intent.putExtra("userId", userId);
                 startActivity(intent);
-                overridePendingTransition(0, 0); // Dezactivează animația de tranziție
+                overridePendingTransition(0, 0);
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                return true; // Rămâi pe pagina curentă
+                return true;
             }
 
             return false;
@@ -140,23 +131,23 @@ public class ProfileActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     CombinedScoresResponse scores = response.body();
 
-                    // Mapăm scorurile din România și Europa în format generic
                     List<Score> romaniaScores = mapRomaniaScoresToGeneric(scores.getRomaniaScores());
                     List<Score> europaScores = mapEuropaScoresToGeneric(scores.getEuropaScores());
 
-                    // Filtrăm scorurile pentru Europa
                     List<Score> filteredEuropaScores = new ArrayList<>();
                     for (Score score : europaScores) {
-                        if (score.isFinalAttempt() && score.getPointsAwarded() == 1.00) { // Noile condiții
+                        if (score.isFinalAttempt() && score.getPointsAwarded() == 1.00) {
                             filteredEuropaScores.add(score);
                         }
                     }
 
-                    // Setăm adapterele
+                    romaniaScores.sort((score1, score2) -> score2.getAttemptTime().compareTo(score1.getAttemptTime()));
+                    filteredEuropaScores.sort((score1, score2) -> score2.getAttemptTime().compareTo(score1.getAttemptTime()));
+
                     ScoresAdapter romaniaAdapter = new ScoresAdapter(romaniaScores);
                     scoresRecyclerView.setAdapter(romaniaAdapter);
 
-                    ScoresAdapter europaAdapter = new ScoresAdapter(filteredEuropaScores); // Doar scorurile filtrate
+                    ScoresAdapter europaAdapter = new ScoresAdapter(filteredEuropaScores);
                     europaScoresRecyclerView.setAdapter(europaAdapter);
                 } else {
                     Toast.makeText(ProfileActivity.this, "Failed to load scores.", Toast.LENGTH_SHORT).show();
@@ -171,16 +162,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-
-
-
     private List<Score> mapRomaniaScoresToGeneric(List<ScoreCountiesGame> romaniaScores) {
         List<Score> genericScores = new ArrayList<>();
         for (ScoreCountiesGame romaniaScore : romaniaScores) {
             Score score = new Score();
             score.setAttemptTime(romaniaScore.getAttemptTime());
             score.setTotalScore(romaniaScore.getTotalScore());
-            score.setFromCountiesGame(true); // Este scor din România
+            score.setFromCountiesGame(true);
 
             genericScores.add(score);
         }
@@ -193,10 +181,10 @@ public class ProfileActivity extends AppCompatActivity {
             Score score = new Score();
             score.setAttemptTime(europaScore.getAttemptTime());
             score.setTotalScore(europaScore.getTotalScore());
-            score.setFromCountiesGame(false); // Este scor din Europa
-            score.setFinalAttempt(europaScore.isFinalAttempt()); // Setează finalAttempt
-            score.setAttemptNumber(europaScore.getAttemptNumber()); // Setează attemptNumber
-            score.setPointsAwarded(europaScore.getPointsAwarded()); // Setează pointsAwarded
+            score.setFromCountiesGame(false);
+            score.setFinalAttempt(europaScore.isFinalAttempt());
+            score.setAttemptNumber(europaScore.getAttemptNumber());
+            score.setPointsAwarded(europaScore.getPointsAwarded());
             genericScores.add(score);
         }
         return genericScores;
@@ -217,8 +205,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void navigateToEditProfile() {
         Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-        intent.putExtra("userId", userId); // Trimite userId către EditProfileActivity
-        startActivityForResult(intent, 1); // Așteaptă un rezultat
+        intent.putExtra("userId", userId);
+        startActivityForResult(intent, 1);
     }
 
 
@@ -227,13 +215,11 @@ public class ProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            // Preia datele actualizate
             String updatedName = data.getStringExtra("updatedName");
             String updatedEmail = data.getStringExtra("updatedEmail");
             String updatedGender = data.getStringExtra("updatedGender");
             int updatedAge = data.getIntExtra("updatedAge", -1);
 
-            // Actualizează UI-ul cu noile date
             userName.setText(updatedName);
             userEmail.setText(updatedEmail);
             userGender.setText(updatedGender);

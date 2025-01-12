@@ -1,10 +1,10 @@
 package com.example.continentexplorer.dto;
 
 public class VisitedCountryRequest {
-    private String visitedCountryName; // Numele țării vizitate
-    private Long userId; // ID-ul utilizatorului
-    private String countryVisitedDate; // Data vizitei
-    private Long continentId; // Adaugă acest atribut
+    private String visitedCountryName;
+    private Long userId;
+    private String countryVisitedDate;
+    private Long continentId;
 
     public VisitedCountryRequest(String visitedCountryName, Long userId, String countryVisitedDate, Long continentId) {
         this.visitedCountryName = visitedCountryName;
@@ -13,7 +13,6 @@ public class VisitedCountryRequest {
         this.continentId = continentId;
     }
 
-    // Getters și Setters
     public String getVisitedCountryName() {
         return visitedCountryName;
     }

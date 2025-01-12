@@ -22,18 +22,15 @@ public class RetrofitClient {
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(loggingInterceptor) // Add logging interceptor
+                    .addInterceptor(loggingInterceptor)
                     .build();
 
             retrofit = new Retrofit.Builder()
                     .baseUrl("http://192.168.1.130:8081/api/")
-                    .client(client) // Use the client with logging
+                    .client(client)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
-
-        System.out.println("=== RetrofitClient Initialized ===");
-        System.out.println("Base URL: http://192.168.1.130:8081/api/");
 
         return retrofit;
     }

@@ -16,8 +16,8 @@
         var counties = document.getElementsByClassName('county');
         for (var i = 0; i &lt; counties.length; i++) {
         counties[i].addEventListener('click', function() {
-        var countyId = this.id; // ID-ul județului
-        Android.onCountySelected(countyId); // Trimite ID-ul către aplicația Android
+        var countyId = this.id;
+        Android.onCountySelected(countyId);
         });
         }
         }

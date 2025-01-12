@@ -7,9 +7,8 @@ public class Score {
     private boolean fromCountiesGame;
     private int attemptNumber;
     private boolean isFinalAttempt;
-    private double pointsAwarded; // Adăugat pentru punctele atribuite
+    private double pointsAwarded;
 
-    // Getters and Setters
     public int getGameId() {
         return gameId;
     }

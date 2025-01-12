@@ -7,7 +7,6 @@
     android:background="@color/white"
     tools:context=".LearningActivity">
 
-    <!-- Icon for Back Button -->
     <ImageView
         android:id="@+id/backButton"
         android:layout_width="25dp"
@@ -19,7 +18,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp" />
 
-    <!-- Learning Title -->
     <TextView
         android:id="@+id/learningTitle"
         android:layout_width="wrap_content"
@@ -33,7 +31,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="40dp" />
 
-    <!-- Section: Europe -->
     <TextView
         android:id="@+id/sectionEurope"
         android:layout_width="wrap_content"
@@ -47,7 +44,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp" />
 
-    <!-- Europe Map Image -->
     <ImageView
         android:id="@+id/europeMap"
         android:layout_width="200dp"
@@ -59,7 +55,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp" />
 
-    <!-- Europe Start Button -->
     <Button
         android:id="@+id/startEuropeButton"
         android:layout_width="150dp"
@@ -72,7 +67,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
 
-    <!-- Section: Romania -->
     <TextView
         android:id="@+id/sectionRomania"
         android:layout_width="wrap_content"
@@ -86,7 +80,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp" />
 
-    <!-- Romania Map Image -->
     <ImageView
         android:id="@+id/romaniaMap"
         android:layout_width="200dp"
@@ -98,7 +91,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp" />
 
-    <!-- Romania Start Button -->
     <Button
         android:id="@+id/startRomaniaButton"
         android:layout_width="150dp"
@@ -111,7 +103,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
 
-    <!-- Bottom Navigation Bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"

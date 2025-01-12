@@ -9,7 +9,6 @@ public class CombinedScoresResponse {
     private List<ScoreCountiesGame> romaniaScores;
     private List<ScoreCountriesGame> europaScores;
 
-    // Getteri și setteri
     public List<ScoreCountiesGame> getRomaniaScores() {
         return romaniaScores;
     }

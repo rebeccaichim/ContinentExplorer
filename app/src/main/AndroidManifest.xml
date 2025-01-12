@@ -40,7 +40,6 @@
         <activity android:name=".YourMapsActivityEuropa" />
         <activity android:name=".LearningActivityRomania" />
         <activity android:name=".LearningActivityEuropa" />
-<!--        <activity android:name=".LearningActivity" />-->
     </application>
 
 </manifest>

@@ -20,73 +20,58 @@ public class LearningActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_learning);
 
-        // Preia userId din Intent
         userId = getIntent().getLongExtra("userId", -1);
         if (userId == -1) {
-            // Dacă userId nu a fost primit corect, redirecționează către LoginActivity
-            Log.e("LearningActivity", "User ID not found. Redirecting to Login.");
             Intent intent = new Intent(LearningActivity.this, LoginActivity.class);
             startActivity(intent);
-            finish(); // Închide activitatea curentă
+            finish();
             return;
         }
 
-        Log.d("LearningActivity", "User ID received: " + userId);
-
-        // Configurare buton de back
         ImageView backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish());
 
-        // Configurare butoane pentru jocuri
         Button startEuropeButton = findViewById(R.id.startEuropeButton);
         Button startRomaniaButton = findViewById(R.id.startRomaniaButton);
 
-        // Butonul pentru Europa
         startEuropeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LearningActivity.this, LearningActivityEuropa.class);
-                intent.putExtra("userId", userId); // Transmite userId către LearningActivityEuropa
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });
 
-        // Butonul pentru România
         startRomaniaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LearningActivity.this, LearningActivityRomania.class);
-                intent.putExtra("userId", userId); // Transmite userId către LearningActivityRomania
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });
 
-        // Configurare navigație de jos (Bottom Navigation)
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Setează elementul curent activ
         bottomNavigationView.setSelectedItemId(R.id.nav_learning);
 
-        // Ascultător pentru schimbarea paginilor din navigație
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_learning) {
-                Log.d("BottomNav", "Navigating to LearningActivity");
-                return true; // Rămâi pe pagina curentă
+                return true;
             } else if (itemId == R.id.nav_maps) {
-                Log.d("BottomNav", "Navigating to YourMapsActivity");
                 Intent intent = new Intent(LearningActivity.this, YourMapsActivity.class);
-                intent.putExtra("userId", userId); // Transmite userId către YourMapsActivity
+                intent.putExtra("userId", userId);
                 startActivity(intent);
-                overridePendingTransition(0, 0); // Dezactivează animația de tranziție
+                overridePendingTransition(0, 0);
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                Log.d("BottomNav", "Navigating to ProfileActivity");
                 Intent intent = new Intent(LearningActivity.this, ProfileActivity.class);
-                intent.putExtra("userId", userId); // Transmite userId către ProfileActivity
+                intent.putExtra("userId", userId);
                 startActivity(intent);
-                overridePendingTransition(0, 0); // Dezactivează animația de tranziție
+                overridePendingTransition(0, 0);
                 return true;
             }
 

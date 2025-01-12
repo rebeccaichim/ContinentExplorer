@@ -34,7 +34,7 @@ public class LearningActivityRomania extends AppCompatActivity {
     private County currentCounty;
     private int attemptsLeft = 3;
     private double totalScore = 0.0;
-    private Long userId; // User ID va fi setat dinamic
+    private Long userId;
     private Long gameId = 1L;
     private List<County> remainingCounties = new ArrayList<>();
     private Set<String> guessedCounties = new HashSet<>();
@@ -53,20 +53,15 @@ public class LearningActivityRomania extends AppCompatActivity {
         pointsTextView = findViewById(R.id.pointsTextView);
         webView = findViewById(R.id.webview_romania_map);
 
-        // Setează userId dintr-o sursă globală (ex: SharedPreferences, Intent extras, sau un manager centralizat)
-        userId = getIntent().getLongExtra("userId", -1); // Exemplu: preluare din Intent
+        userId = getIntent().getLongExtra("userId", -1);
         if (userId == -1) {
             Toast.makeText(this, "User ID not found. Please login.", Toast.LENGTH_SHORT).show();
-            finish(); // Închide activitatea dacă userId nu este setat
+            finish();
             return;
         }
 
-        Log.d("LearningActivity", "User ID received: " + userId);
-
-
         ImageView backArrow = findViewById(R.id.backButton);
         backArrow.setOnClickListener(view -> {
-            // Navighează înapoi
             onBackPressed();
         });
 
@@ -128,7 +123,6 @@ public class LearningActivityRomania extends AppCompatActivity {
         attemptsLeft = 3;
         attemptNumber = 1;
         attemptsTextView.setText("Attempts left: " + attemptsLeft);
-        Log.d(TAG, "Random county loaded: " + currentCounty.getCountyName());
     }
 
 
@@ -183,14 +177,10 @@ public class LearningActivityRomania extends AppCompatActivity {
                 userId, gameId, currentCounty.getCountyId(), attemptNumber, pointsAwarded, updatedTotalScore, isFinalAttempt, attemptTime
         );
 
-        Log.d(TAG, "Saving score for userId " + userId + ": " + scoreRequest.toString());
-
         apiService.saveRomaniaScore(scoreRequest).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "Score saved successfully for userId " + userId);
-
                     if (isCorrect || attemptsLeft == 0) {
                         attemptNumber = 1;
                     }

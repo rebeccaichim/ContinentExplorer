@@ -1,10 +1,10 @@
 package com.example.continentexplorer.dto;
 
 public class VisitedCountyRequest {
-    private String visitedCountyName; // Trebuie să fie prezent, conform backend-ului
-    private Long countryId; // Trebuie să fie Long, conform backend-ului
-    private String countyVisitedDate; // Nume schimbat pentru a corespunde backend-ului
-    private Long userId; // Adaugă câmpul userId
+    private String visitedCountyName;
+    private Long countryId;
+    private String countyVisitedDate;
+    private Long userId;
 
 
     public VisitedCountyRequest(String visitedCountyName, Long countryId, String countyVisitedDate, Long userId) {
@@ -14,7 +14,6 @@ public class VisitedCountyRequest {
         this.userId = userId;
     }
 
-    // Getters și Setters
     public String getVisitedCountyName() {
         return visitedCountyName;
     }

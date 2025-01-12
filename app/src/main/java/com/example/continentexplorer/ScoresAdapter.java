@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.continentexplorer.R;
 import com.example.continentexplorer.dto.Score;
 
 import java.util.List;
@@ -33,15 +32,13 @@ public class ScoresAdapter extends RecyclerView.Adapter<ScoresAdapter.ScoreViewH
     public void onBindViewHolder(@NonNull ScoreViewHolder holder, int position) {
         Score score = scores.get(position);
 
-        // Setează textul pentru dată și scor
         holder.dateTextView.setText(score.getAttemptTime());
         holder.scoreTextView.setText(score.getTotalScore() + "p");
 
-        // Alege imaginea în funcție de tabel
         if (score.isFromCountiesGame()) {
-            holder.mapImageView.setImageResource(R.drawable.ic_map_romania); // Imagine România
+            holder.mapImageView.setImageResource(R.drawable.ic_map_romania);
         } else {
-            holder.mapImageView.setImageResource(R.drawable.ic_map_europa); // Imagine Europa
+            holder.mapImageView.setImageResource(R.drawable.ic_map_europa);
         }
     }
 

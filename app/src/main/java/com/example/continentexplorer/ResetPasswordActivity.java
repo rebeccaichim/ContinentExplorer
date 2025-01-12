@@ -56,12 +56,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Toast.makeText(ResetPasswordActivity.this, "Password updated successfully!", Toast.LENGTH_SHORT).show();
 
-                    // Redirecționează către LoginActivity
                     Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 
-                    finish(); // Închide activitatea curentă
+                    finish();
                 } else {
                     Toast.makeText(ResetPasswordActivity.this, "Failed to reset password. Please try again.", Toast.LENGTH_SHORT).show();
                 }

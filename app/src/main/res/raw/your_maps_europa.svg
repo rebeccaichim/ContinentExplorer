@@ -14,11 +14,11 @@
 
     <script type="text/javascript">
         function enableInteractivity() {
-        var countries = document.getElementsByClassName('country'); // Asigură-te că toate țările din SVG au clasa 'country'
+        var countries = document.getElementsByClassName('country');
         for (var i = 0; i &lt; countries.length; i++) {
         countries[i].addEventListener('click', function() {
-        var countryId = this.id; // ID-ul țării
-        Android.onCountrySelected(countryId); // Trimite ID-ul către aplicația Android
+        var countryId = this.id;
+        Android.onCountrySelected(countryId);
         });
         }
         }
@@ -27,7 +27,7 @@
         var country = document.getElementById(countryId);
         if (country) {
         var pin = document.createElementNS("http://www.w3.org/2000/svg", "image");
-        pin.setAttribute("href", "pin.png"); // Imaginea pin-ului
+        pin.setAttribute("href", "pin.png");
         pin.setAttribute("x", country.getBBox().x + country.getBBox().width / 2 - 10);
         pin.setAttribute("y", country.getBBox().y + country.getBBox().height / 2 - 25);
         pin.setAttribute("width", "20");
@@ -39,7 +39,7 @@
         function highlightCountry(countryId, color) {
         var country = document.getElementById(countryId);
         if (country) {
-        country.style.fill = color; // Schimbă culoarea țării
+        country.style.fill = color;
         }
         }
 
@@ -49,13 +49,12 @@
         country.classList.add("flash-red");
         setTimeout(() => {
         country.classList.remove("flash-red");
-        }, 300); // Flash scurt pentru răspuns incorect
+        }, 300);
         }
         }
     </script>
 
 
-    <!-- Stil pentru SVG -->
     <style>
         .country { fill: #d3d3d3; stroke: #ff6600; stroke-width: 1; transition: fill 0.3s; }
         .country:hover { fill: #b3d9ff; cursor: pointer; }

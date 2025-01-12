@@ -27,28 +27,23 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        // Inițializează componentele UI
         editName = findViewById(R.id.editName);
         editEmail = findViewById(R.id.editEmail);
         editGender = findViewById(R.id.editGender);
         editAge = findViewById(R.id.editAge);
         saveButton = findViewById(R.id.saveButton);
 
-        // Inițializează Retrofit și userId
         apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
         userId = getIntent().getLongExtra("userId", -1);
 
-        // Verifică dacă userId este valid
         if (userId == -1) {
             Toast.makeText(this, "Invalid user ID. Redirecting to login.", Toast.LENGTH_SHORT).show();
-            finish(); // Închide activitatea dacă userId nu este valid
+            finish();
             return;
         }
 
-        // Populează câmpurile cu datele existente
         loadUserProfile();
 
-        // Salvează datele actualizate
         saveButton.setOnClickListener(v -> saveUserProfile());
     }
 
@@ -98,7 +93,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Toast.makeText(EditProfileActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
 
-                    // Trimite datele actualizate înapoi la ProfileActivity
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("updatedName", name);
                     resultIntent.putExtra("updatedEmail", email);
@@ -106,7 +100,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     resultIntent.putExtra("updatedAge", age);
                     setResult(RESULT_OK, resultIntent);
 
-                    finish(); // Închide activitatea curentă
+                    finish();
                 } else {
                     Toast.makeText(EditProfileActivity.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
                 }

@@ -43,7 +43,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         ImageView backArrow = findViewById(R.id.imageViewBack);
         backArrow.setOnClickListener(view -> {
-            // Navighează înapoi
             onBackPressed();
         });
 
@@ -90,7 +89,7 @@ public class SignUpActivity extends AppCompatActivity {
         textViewLogin.setOnClickListener(v -> {
             Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
             startActivity(intent);
-            finish(); // Închide activitatea curentă pentru a evita suprapunerea
+            finish();
         });
 
     }

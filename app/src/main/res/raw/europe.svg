@@ -11,12 +11,11 @@ height="100%"
 viewBox="0 0 850 800"
 preserveAspectRatio="xMidYMid meet">
 
-<!-- JavaScript pentru funcționalitățile interactive -->
 <script type="text/javascript">
  function selectCountry(countryId) {
  var selectedCountry = document.getElementById(countryId);
  if (selectedCountry) {
- Android.onCountrySelected(countryId); // Trimite ID-ul către Java pentru verificare
+ Android.onCountrySelected(countryId);
  }
  }
 
@@ -26,19 +25,18 @@ preserveAspectRatio="xMidYMid meet">
  country.classList.add("flash-red");
  setTimeout(() => {
  country.classList.remove("flash-red");
- }, 300); // Flash scurt pentru răspuns incorect
+ }, 300);
  }
  }
 
  function setColor(countryId, color) {
  var country = document.getElementById(countryId);
  if (country) {
- country.style.fill = color; // Setează culoarea țării
+ country.style.fill = color;
  }
  }
 </script>
 
-<!-- Stil pentru SVG -->
 <style>
  .country { fill: #d3d3d3; stroke: #ff6600; stroke-width: 1; transition: fill 0.3s; }
  .country:hover { fill: #b3d9ff; cursor: pointer; }

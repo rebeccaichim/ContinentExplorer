@@ -16,7 +16,7 @@
     function selectCounty(countyId) {
     var selectedCounty = document.getElementById(countyId);
     if (selectedCounty) {
-    Android.onCountySelected(countyId); // Trimite ID-ul către Java pentru verificare
+    Android.onCountySelected(countyId);
     }
     }
 
@@ -26,14 +26,14 @@
     county.classList.add("flash-red");
     setTimeout(() => {
     county.classList.remove("flash-red");
-    }, 300); // Flash scurt pentru răspuns incorect
+    }, 300);
     }
     }
 
     function setColor(countyId, color) {
     var county = document.getElementById(countyId);
     if (county) {
-    county.style.fill = color; // Setează culoarea județului
+    county.style.fill = color;
     }
     }
   </script>
